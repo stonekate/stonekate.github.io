@@ -6,6 +6,8 @@
         <meta charset="utf-8" >
         <title>Kate Stone | University of Potsdam</title>
         <style>
+			header {
+				}
             body {
                 width: 90%;
                 max-width: 900px;
@@ -13,12 +15,12 @@
                 }
             h1 {
                 color: #2E4053;
-                font-family: "Open sans", Helvetica, sans-serif;
+                font-family: "Arial", Helvetica, sans-serif;
                 font-size: 150%;
                 }
             h2 {
                 color: #2E4053;
-                font-family: "Open sans", Helvetica, sans-serif;
+                font-family: "Arial", Helvetica, sans-serif;
                 font-size: 125%;
                 }
             h3 {
@@ -38,36 +40,37 @@
                 align-text: justify;
                 margin-left: 20px;
                 }   
-            #share-buttons img {
+            <!--#share-buttons img {
                 clear: both;
                 float: left;
-                width: 20px;
-                height: 20px;
+                width: 50px;
+                height: 50px;
                 padding: 1em;
                 display: inline;
-                }
+                }-->
 
         </style>
     </head>
-    <body>
-        <div>
+		<div class="header">
+			<a href="https://scholar.google.com/citations?user=JQpDw6wAAAAJ&hl=en">
+			<img style="float:right" width=7% src="gscholar.png"/>
+			</a>
+			<a href="https://osf.io/fz6w8">
+			<img style="float:right" width=7% src="osf.png"/>
+			</a>
+		</div>
+        <div class="body">
             <img style="float: left; padding-right: 25px;" src="CV.jpg" width=200 height=130 alt="Img: Stone"/>
             <h1>Kate Stone</h1>
             <h2>Department of Linguistics</h2>
             <h2>University of Potsdam</h2>
-        </div>
-        <!-- <div id="share-buttons">
-			<a href="https://twitter.com/KatieKathi">
-			<img src="Tw_square_blue.jpg"/>
-        </div> -->
-        <div>
-            <p style="clear: both; padding-top:25px;">surname [at] uni-potsdam.de</p>
-        </div>
+			<p style="clear: both; padding-top:25px;">surname [at] uni-potsdam.de</p>
         <h3>About me</h3>
             <p>I am a psycholinguist in the <a href="http://www.ling.uni-potsdam.de/~vasishth/">Vasishth Lab</a>. 
 			My current interest is in predictive processing and what this tells us about how words are stored and accessed in the brain.
 			More generally, I am interested in how different fields such as neuroscience, computer science and linguistics can inform each other to build comprehensive theories of human cognition. 
 			</p>
+			<p><b>Research interests:</b> Predictive processing, lexical entropy, ERP, visual world, eye tracking, statistical methods, open science</p>
         <h3>CV</h3>
             <p>PhD Cogntive Science <i>(University of Potsdam, Germany)</i>, MSc Experimental Linguistics <i>(University of Potsdam, Germany)</i>, BA Linguistics <i>(University of Melbourne, Australia)</i>, B.Behavioural Neuroscience <i>(Monash University, Australia)</i></p>
         <h3>Papers</h3>
@@ -90,5 +93,5 @@
 				<p>Idealab Summer School 2018 - Introduction to R and statistics. Potsdam University, Germany.</p>
 				<p>Introduction to Statistical Data Analysis WS17/18 (Teaching Assistant). Potsdam University, Germany.</p> 
 				<p>Idealab Summer School 2017 - Introduction to R and statistics. Potsdam University, Germany.</p>
-	</body>
+	</div>
 </html>
