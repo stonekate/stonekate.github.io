@@ -1,0 +1,11 @@
+---
+title: "Kate Stone"
+author: "Kate Stone"
+# date: 2020-12-01T21:13:14-05:00
+#categories: ["R"]
+#tags: ["R Markdown", "plot", "regression"]
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(collapse = TRUE)
+```
