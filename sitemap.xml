@@ -3,7 +3,22 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
+    <loc>/post/comebacklater/</loc>
+    <lastmod>2021-02-02T21:48:51-07:00</lastmod>
+  </url>
+  
+  <url>
     <loc>/about/</loc>
+    <lastmod>2021-02-02T21:48:51-07:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/</loc>
+    <lastmod>2021-02-02T21:48:51-07:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/post/</loc>
     <lastmod>2021-02-02T21:48:51-07:00</lastmod>
   </url>
   
@@ -18,10 +33,6 @@
   
   <url>
     <loc>/drafts/2020-12-01-r-rmarkdown/</loc>
-  </url>
-  
-  <url>
-    <loc>/</loc>
   </url>
   
 </urlset>
