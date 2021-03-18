@@ -18,20 +18,20 @@
     
     <item>
       <title>About me</title>
-      <link>/first/</link>
+      <link>/drafts/about/</link>
       <pubDate>Tue, 02 Feb 2021 21:48:51 -0700</pubDate>
       
-      <guid>/first/</guid>
+      <guid>/drafts/about/</guid>
       <description>I am a psycholinguist in the Vasishth Lab and the Cognitive Neuroscience Lab at the University of Potsdam, Germany. My interest is in probabilistic sentence processing and what this tells us about how words are stored and accessed in the brain. More generally, I am interested in how different fields such as neuroscience, computer science and linguistics can inform each other to build comprehensive theories of human cognition.
 CV PhD Cognitive Science (University of Potsdam, Germany)</description>
     </item>
     
     <item>
       <title>About me</title>
-      <link>/post/about/</link>
+      <link>/first/</link>
       <pubDate>Tue, 02 Feb 2021 21:48:51 -0700</pubDate>
       
-      <guid>/post/about/</guid>
+      <guid>/first/</guid>
       <description>I am a psycholinguist in the Vasishth Lab and the Cognitive Neuroscience Lab at the University of Potsdam, Germany. My interest is in probabilistic sentence processing and what this tells us about how words are stored and accessed in the brain. More generally, I am interested in how different fields such as neuroscience, computer science and linguistics can inform each other to build comprehensive theories of human cognition.
 CV PhD Cognitive Science (University of Potsdam, Germany)</description>
     </item>

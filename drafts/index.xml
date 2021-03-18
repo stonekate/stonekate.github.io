@@ -5,7 +5,18 @@
     <link>/drafts/</link>
     <description>Recent content in Drafts on Kate Stone | University of Potsdam</description>
     <generator>Hugo -- gohugo.io</generator>
-    <language>en</language><atom:link href="/drafts/index.xml" rel="self" type="application/rss+xml" />
+    <language>en</language>
+    <lastBuildDate>Tue, 02 Feb 2021 21:48:51 -0700</lastBuildDate><atom:link href="/drafts/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>About me</title>
+      <link>/drafts/about/</link>
+      <pubDate>Tue, 02 Feb 2021 21:48:51 -0700</pubDate>
+      
+      <guid>/drafts/about/</guid>
+      <description>I am a psycholinguist in the Vasishth Lab and the Cognitive Neuroscience Lab at the University of Potsdam, Germany. My interest is in probabilistic sentence processing and what this tells us about how words are stored and accessed in the brain. More generally, I am interested in how different fields such as neuroscience, computer science and linguistics can inform each other to build comprehensive theories of human cognition.
+CV PhD Cognitive Science (University of Potsdam, Germany)</description>
+    </item>
+    
     <item>
       <title>Kate Stone</title>
       <link>/drafts/2020-12-01-r-rmarkdown/</link>

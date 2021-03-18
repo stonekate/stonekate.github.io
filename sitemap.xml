@@ -8,12 +8,17 @@
   </url>
   
   <url>
+    <loc>/drafts/about/</loc>
+    <lastmod>2021-02-02T21:48:51-07:00</lastmod>
+  </url>
+  
+  <url>
     <loc>/first/</loc>
     <lastmod>2021-02-02T21:48:51-07:00</lastmod>
   </url>
   
   <url>
-    <loc>/post/about/</loc>
+    <loc>/drafts/</loc>
     <lastmod>2021-02-02T21:48:51-07:00</lastmod>
   </url>
   
@@ -30,10 +35,6 @@
   <url>
     <loc>/publications/</loc>
     <lastmod>2021-02-02T21:48:51-07:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>/drafts/</loc>
   </url>
   
   <url>
