@@ -3,36 +3,36 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
-    <loc>about/post/comebacklater/</loc>
+    <loc>/post/comebacklater/</loc>
     <lastmod>2021-02-02T21:48:51-07:00</lastmod>
   </url>
   
   <url>
-    <loc>about/about/</loc>
+    <loc>/about/</loc>
     <lastmod>2021-02-02T21:48:51-07:00</lastmod>
   </url>
   
   <url>
-    <loc>about/</loc>
+    <loc>/</loc>
     <lastmod>2021-02-02T21:48:51-07:00</lastmod>
   </url>
   
   <url>
-    <loc>about/post/</loc>
+    <loc>/post/</loc>
     <lastmod>2021-02-02T21:48:51-07:00</lastmod>
   </url>
   
   <url>
-    <loc>about/publications/</loc>
+    <loc>/publications/</loc>
     <lastmod>2021-02-02T21:48:51-07:00</lastmod>
   </url>
   
   <url>
-    <loc>about/drafts/</loc>
+    <loc>/drafts/</loc>
   </url>
   
   <url>
-    <loc>about/drafts/2020-12-01-r-rmarkdown/</loc>
+    <loc>/drafts/2020-12-01-r-rmarkdown/</loc>
   </url>
   
 </urlset>
