@@ -252,7 +252,7 @@
 <p>We now have a posterior estimate that predictions in the mismatch condition were 336 ms slower than in the match condition, with a 95% credible interval of 288–384 ms. This posterior aligns quite well with the original bootstrap difference distribution, which estimated a difference of 338 ms with a 95th percentile interval of 300–380ms.</p>
 <div id="quantifying-evidence-with-a-bayes-factor" class="section level4">
 <h4>Quantifying evidence with a Bayes factor</h4>
-<p>How much has seeing the data changed our prior belief that the true difference between conditions is zero? Since the likelihood is not normalised, we can use the Savage-Dickey method to compute a Bayes factor (<a href="https://www.jstor.org/stable/2239734">Dickey &amp; Lientz, 1970</a>; <a href="https://doi.org/10.1016/j.cogpsych.2009.12.001">Wagenmakers et al., 2010</a>). This method finds the ratio of prior to posterior density at some point value (e.g. zero):</p>
+<p>How much has seeing the data changed our belief in the null hypothesis that the difference between match/mismatch conditions is zero? Since the likelihood is not normalised, we can use the Savage-Dickey method to compute a Bayes factor and quantify evidence against the null (<a href="https://www.jstor.org/stable/2239734">Dickey &amp; Lientz, 1970</a>; <a href="https://doi.org/10.1016/j.cogpsych.2009.12.001">Wagenmakers et al., 2010</a>). This method finds the ratio of prior to posterior density at some point value (e.g. zero):</p>
 <p><img src="/post/2021-04-08-bayesian-divergence-point-analysis/index.en_files/figure-html/unnamed-chunk-9-1.png" width="384" style="display: block; margin: auto;" /></p>
 <p>We compute the ratio via the equation below, where</p>
 <ul>
@@ -280,7 +280,7 @@ density_posterior_null &lt;- dnorm(null_hypothesis,
 # use Savage-Dickey equation to compute the Bayes factor
 (BF01 &lt;- density_posterior_null/density_prior_null)</code></pre>
 <pre><code>## [1] 1.402512e-44</code></pre>
-<p>Because the posterior density at zero is less than the prior density (in fact, the posterior density at zero is almost zero), the Bayes factor is less than 1 and thus favours the alternative hypothesis that there is a match/mismatch difference. We can see more clearly how strongly if favours the alternative hypothesis if we flip the ratio to test the alternative vs. null hypotheses (BF10) rather than the null vs. alternative (BF01):</p>
+<p>Because the posterior density at zero is less than the prior density (in fact, the posterior density at zero is almost zero), the Bayes factor is less than 1 and thus favours the alternative hypothesis that there is a match/mismatch difference. We can see more clearly how strongly it favours the alternative hypothesis if we flip the ratio to test the alternative vs. null hypotheses (BF10) rather than the null vs. alternative (BF01):</p>
 <pre class="r"><code>(BF10 &lt;- 1/BF01)</code></pre>
 <pre><code>## [1] 7.130063e+43</code></pre>
 </div>

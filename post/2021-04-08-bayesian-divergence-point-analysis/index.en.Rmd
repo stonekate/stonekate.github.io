@@ -702,7 +702,7 @@ We now have a posterior estimate that predictions in the mismatch condition were
 
 #### Quantifying evidence with a Bayes factor
 
-\noindent How much has seeing the data changed our prior belief that the true difference between conditions is zero? Since the likelihood is not normalised, we can use the Savage-Dickey method to compute a Bayes factor ([Dickey & Lientz, 1970](https://www.jstor.org/stable/2239734); [Wagenmakers et al., 2010](https://doi.org/10.1016/j.cogpsych.2009.12.001)). This method finds the ratio of prior to posterior density at some point value (e.g. zero): 
+\noindent How much has seeing the data changed our belief in the null hypothesis that the difference between match/mismatch conditions is zero? Since the likelihood is not normalised, we can use the Savage-Dickey method to compute a Bayes factor and quantify evidence against the null ([Dickey & Lientz, 1970](https://www.jstor.org/stable/2239734); [Wagenmakers et al., 2010](https://doi.org/10.1016/j.cogpsych.2009.12.001)). This method finds the ratio of prior to posterior density at some point value (e.g. zero): 
 
 
 ```{r, fig.height=4, fig.width=4, fig.align="center"}
@@ -776,7 +776,7 @@ density_posterior_null <- dnorm(null_hypothesis,
 
 ```
 
-Because the posterior density at zero is less than the prior density (in fact, the posterior density at zero is almost zero), the Bayes factor is less than 1 and thus favours the alternative hypothesis that there is a match/mismatch difference. We can see more clearly how strongly if favours the alternative hypothesis if we flip the ratio to test the alternative vs. null hypotheses (BF10) rather than the null vs. alternative (BF01):
+Because the posterior density at zero is less than the prior density (in fact, the posterior density at zero is almost zero), the Bayes factor is less than 1 and thus favours the alternative hypothesis that there is a match/mismatch difference. We can see more clearly how strongly it favours the alternative hypothesis if we flip the ratio to test the alternative vs. null hypotheses (BF10) rather than the null vs. alternative (BF01):
 
 ```{r, echo=TRUE}
 
