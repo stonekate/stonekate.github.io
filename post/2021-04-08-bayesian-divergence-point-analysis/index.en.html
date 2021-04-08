@@ -451,7 +451,7 @@ pre code {
 <li><span class="math inline">\(H_1\)</span> is our posterior distribution, and</li>
 <li><span class="math inline">\(D\)</span> is the data:</li>
 </ul>
-<p><span class="math display">\[ BF_{10} = \frac{p(D|H_1)}{p(D|H_0)}= \frac{p(\theta = 0|H_1)}{p(\theta = 0|D,H_1)} \]</span></p>
+<p><span class="math display">\[ BF_{01} = \frac{p(D|H_1)}{p(D|H_0)}= \frac{p(\theta = 0|H_1)}{p(\theta = 0|D,H_1)} \]</span></p>
 <p>Or in R form:</p>
 <pre class="r"><code># define the null hypothesis
 null_hypothesis &lt;- 0
@@ -464,10 +464,14 @@ density_prior_null     &lt;- dnorm(null_hypothesis,
 # find the density of the posterior at the null hypothesis
 density_posterior_null &lt;- dnorm(null_hypothesis, 
                                 difference_posterior_mean, 
-                                difference_posterior_sd)</code></pre>
-<p>Because the posterior density at zero is less than the prior density (in fact, the posterior density at zero is almost zero), the Bayes factor strongly favours the alternative hypothesis that there is a match/mismatch difference:</p>
-<pre class="r"><code># use Savage-Dickey ratio to compute the Bayes factor
-(BF10 &lt;- 1/(density_posterior_null/density_prior_null))</code></pre>
+                                difference_posterior_sd)
+
+
+# use Savage-Dickey equation to compute the Bayes factor
+(BF01 &lt;- density_posterior_null/density_prior_null)</code></pre>
+<pre><code>## [1] 1.402512e-44</code></pre>
+<p>Because the posterior density at zero is less than the prior density (in fact, the posterior density at zero is almost zero), the Bayes factor is less than 1 and thus favours the alternative hypothesis that there is a match/mismatch difference. We can see more clearly how strongly if favours the alternative hypothesis if we flip the ratio to test the alternative vs. null hypotheses (BF10) rather than the null vs. alternative (BF01):</p>
+<pre class="r"><code>(BF10 &lt;- 1/BF01)</code></pre>
 <pre><code>## [1] 7.130063e+43</code></pre>
 </div>
 </div>
