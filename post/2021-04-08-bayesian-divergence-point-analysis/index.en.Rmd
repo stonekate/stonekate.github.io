@@ -10,6 +10,10 @@ Description: ''
 #Categories: []
 DisableComments: yes
 # draft: TRUE
+header-includes:
+- <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+- <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
 ---
 
 ```{r setup, include=FALSE}
@@ -75,7 +79,7 @@ Because of the gender cue on the possessive and adjective (e.g. -en suffix), we 
 
 
 
-```{r, fig.width=10, fig.height=5}
+```{r, fig.width=6, fig.height=3.5, fig.align="center"}
 
 # create plotting data
 plot_exp2 <- dat_exp2 %>% 
@@ -114,14 +118,14 @@ ggplot(plot_exp2, aes(Time, MeanFixation)) +
   geom_vline(xintercept = onsets, linetype = "dashed", colour = "grey50") +
   
   # add word stimuli
-  geom_text(data = subset(words, Condition == "match"), label = "seinen", y = .13, 
-            x = 0, angle = 90, fontface = "italic", size = 5, colour = "grey50") +
-  geom_text(data = subset(words, Condition == "mismatch"), label = "ihren", y = .12, 
-            x = 0, angle = 90, fontface = "italic", size = 5, colour = "grey50") +
-  annotate(geom = "text", label = "blauen", x = onsets[1]-60, y = .13, angle = 90,
-           fontface = "italic", size = 5, colour = "grey50") +
-  annotate(geom = "text", label = "Knopf", x = onsets[2]-60, y = .11, angle = 90,
-           fontface = "italic", size = 5, colour = "grey50") +
+  geom_text(data = subset(words, Condition == "match"), label = "seinen", y = .15, 
+            x = 0, angle = 90, fontface = "italic", size = 4, colour = "grey50") +
+  geom_text(data = subset(words, Condition == "mismatch"), label = "ihren", y = .14, 
+            x = 0, angle = 90, fontface = "italic", size = 4, colour = "grey50") +
+  annotate(geom = "text", label = "blauen", x = onsets[1]-60, y = .15, angle = 90,
+           fontface = "italic", size = 4, colour = "grey50") +
+  annotate(geom = "text", label = "Knopf", x = onsets[2]-60, y = .13, angle = 90,
+           fontface = "italic", size = 4, colour = "grey50") +
 
   # axes and legends
   labs(x = "Time from possessive onset (ms)", y = "Fixation proportions") +
@@ -133,7 +137,7 @@ ggplot(plot_exp2, aes(Time, MeanFixation)) +
   
   # theme settings
   theme_light() +
-  theme(strip.text = element_text(size = 20), text = element_text(size = 20), legend.position = "top")
+  theme(strip.text = element_text(size = 16), text = element_text(size = 14), legend.position = "top")
 
 
 
@@ -162,7 +166,7 @@ The procedure yields two bootstrap distributions: one distribution each of onset
 
 
 
-```{r, fig.width=10, fig.height=9}
+```{r, fig.width=8, fig.height=7, fig.align="center"}
 
 # Plot Figure 5 of the manuscript
 fig2ai <- ggplot(subset(df_l1l2, Condition == "match"), aes(onset)) + 
@@ -181,8 +185,8 @@ fig2ai <- ggplot(subset(df_l1l2, Condition == "match"), aes(onset)) +
    # aesthetic parameters
    labs(x = "Onset (ms)", y = "Frequency") +
    theme_light() +
-   theme(strip.text = element_text(size = 20),
-         text = element_text(size = 20, colour="gray28"),
+   theme(strip.text = element_text(size = 16),
+         text = element_text(size = 14, colour="gray28"),
          panel.spacing = unit(4, "lines"))
 
 
@@ -203,8 +207,8 @@ fig2aii <- ggplot(subset(df_l1l2, Condition == "mismatch"), aes(onset)) +
    labs(x = "Onset (ms)", y = "Frequency") +
    xlim(c(680, 740)) +
    theme_light() +
-   theme(strip.text = element_text(size = 20),
-         text = element_text(size = 20, colour="gray28"),
+   theme(strip.text = element_text(size = 16),
+         text = element_text(size = 14, colour="gray28"),
          panel.spacing = unit(4, "lines"))
 
 
@@ -245,13 +249,13 @@ fig2b <- ggplot(plot_exp2, aes(Time, MeanFixation)) +
   geom_vline(xintercept = onsets, linetype = "dashed", colour = "grey50") +
   
   # add word stimuli
-  geom_text(data = subset(words, Condition == "match"), label = "seinen", y = .13, 
+  geom_text(data = subset(words, Condition == "match"), label = "seinen", y = .15, 
             x = 0, angle = 90, fontface = "italic", size = 5, colour = "grey50") +
-  geom_text(data = subset(words, Condition == "mismatch"), label = "ihren", y = .12, 
+  geom_text(data = subset(words, Condition == "mismatch"), label = "ihren", y = .14, 
             x = 0, angle = 90, fontface = "italic", size = 5, colour = "grey50") +
-  annotate(geom = "text", label = "blauen", x = onsets[1]-60, y = .13, angle = 90,
+  annotate(geom = "text", label = "blauen", x = onsets[1]-60, y = .15, angle = 90,
            fontface = "italic", size = 5, colour = "grey50") +
-  annotate(geom = "text", label = "Knopf", x = onsets[2]-60, y = .11, angle = 90,
+  annotate(geom = "text", label = "Knopf", x = onsets[2]-60, y = .13, angle = 90,
            fontface = "italic", size = 5, colour = "grey50") +
 
   # add bootstrapped onset and credible interval in the match condition
@@ -280,11 +284,13 @@ fig2b <- ggplot(plot_exp2, aes(Time, MeanFixation)) +
   
   # theme settings
   theme_light() +
-  theme(strip.text = element_text(size = 20), text = element_text(size = 20), legend.position = "top")
+  theme(strip.text = element_text(size = 16), text = element_text(size = 14), legend.position = "top")
 
 
 # compile
-(fig2 <- (fig2ai + fig2aii) / fig2b + plot_layout(heights = c(1, 2)) + plot_annotation(tag_levels = "A"))
+(fig2 <- (fig2ai + fig2aii) / fig2b + plot_layout(heights = c(1, 2)) 
+  # + plot_annotation(tag_levels = "A")
+  )
 
 
 # ggsave("C:/repos/stonekate.github.io/static/images/fig2.png", fig2, height = 10, width = 10, dpi = 300)
@@ -294,7 +300,7 @@ fig2b <- ggplot(plot_exp2, aes(Time, MeanFixation)) +
 By subtracting the match from the mismatch distribution, we obtain a distribution of differences between conditions. We take the mean and the 95th percentile CI of this difference distribution as the estimated difference in prediction onset. We can decide whether the difference is different from zero by looking at whether the 95th percentile CI of the difference distribution contains zero. Since it does not, we can conclude that the difference between conditions is not zero. Moreover, since all values in the distribution are positive, we can conclude that predictions were slower in the mismatch condition:
 
 
-```{r, fig.height = 2, fig.width = 3}
+```{r, fig.height = 3, fig.width = 4, fig.align="center"}
 
 
 # Plot Figure 5 of the manuscript
@@ -316,8 +322,8 @@ By subtracting the match from the mismatch distribution, we obtain a distributio
    # aesthetic parameters
    labs(x = "Difference in onsets (ms)", y = "Frequency") +
    theme_light() +
-   theme(text = element_text(size = 10, colour="gray28"),
-         strip.text = element_text(size = 12),
+   theme(text = element_text(size = 14, colour="gray28"),
+         strip.text = element_text(size = 16),
          panel.spacing = unit(4, "lines")))
 
 # ggsave("C:/repos/stonekate.github.io/static/images/fig3.png", fig3, height = 3, width = 4, dpi = 300)
@@ -577,7 +583,7 @@ lines(dnorm(0:1500, posterior_mean_mi_inf, posterior_sd_mi_inf), xlim=xlims, col
 
 How do the Bayesian onsets (red, uninformative priors) compare with the onsets from the original bootstrap procedure (black)? Quite well:
 
-```{r, fig.height=4, fig.width=8}
+```{r, fig.height=3.5, fig.width=6, fig.align="center"}
 
 # create plotting data
 plot_exp2 <- dat_exp2 %>% 
@@ -615,27 +621,27 @@ ggplot(plot_exp2, aes(Time, MeanFixation)) +
   geom_vline(xintercept = onsets, linetype = "dashed", colour = "grey50") +
   
   # add word stimuli
-  geom_text(data = subset(words, Condition == "match"), label = "seinen", y = .13, 
-            x = 0, angle = 90, fontface = "italic", size = 5, colour = "grey50") +
-  geom_text(data = subset(words, Condition == "mismatch"), label = "ihren", y = .12, 
-            x = 0, angle = 90, fontface = "italic", size = 5, colour = "grey50") +
-  annotate(geom = "text", label = "blauen", x = onsets[1]-60, y = .13, angle = 90,
-           fontface = "italic", size = 5, colour = "grey50") +
-  annotate(geom = "text", label = "Knopf", x = onsets[2]-60, y = .11, angle = 90,
-           fontface = "italic", size = 5, colour = "grey50") +
+  geom_text(data = subset(words, Condition == "match"), label = "seinen", y = .15, 
+            x = 0, angle = 90, fontface = "italic", size = 4, colour = "grey50") +
+  geom_text(data = subset(words, Condition == "mismatch"), label = "ihren", y = .14, 
+            x = 0, angle = 90, fontface = "italic", size = 4, colour = "grey50") +
+  annotate(geom = "text", label = "blauen", x = onsets[1]-60, y = .15, angle = 90,
+           fontface = "italic", size = 4, colour = "grey50") +
+  annotate(geom = "text", label = "Knopf", x = onsets[2]-60, y = .13, angle = 90,
+           fontface = "italic", size = 4, colour = "grey50") +
 
   # add bootstrapped onset and credible interval in the match condition
   # original
   geom_point(data = filter(plot_exp2, Condition == "match"), size = 4,
              aes(x = mean(bootres_exp2$t[ ,2], na.rm = TRUE)*20, y = .5)) +
-  geom_errorbarh(data = filter(plot_exp2, Condition == "match"),size = 1, height = .075, 
+  geom_errorbarh(data = filter(plot_exp2, Condition == "match"),size = 1, height = .1, 
                  aes(y    = .5,
                      xmin = boot::boot.ci(bootres_exp2, index = 2, type = "perc")$percent[4]*20,
                      xmax = boot::boot.ci(bootres_exp2, index = 2, type = "perc")$percent[5]*20)) +
   # bayesian
   geom_point(data = filter(plot_exp2, Condition == "match"), size = 4, colour = "red2",
              aes(x = posterior_mean_ma, y = .6)) +
-  geom_errorbarh(data = filter(plot_exp2, Condition == "match"),size = 1, height = .075, 
+  geom_errorbarh(data = filter(plot_exp2, Condition == "match"),size = 1, height = .1, 
                  aes(y    = .6, 
                      xmin = round(qnorm(c(.025), posterior_mean_ma, posterior_sd_ma)),
                      xmax = round(qnorm(c(.975), posterior_mean_ma, posterior_sd_ma))), colour = "red2") +
@@ -643,14 +649,14 @@ ggplot(plot_exp2, aes(Time, MeanFixation)) +
   # original
   geom_point(data = filter(plot_exp2, Condition == "mismatch"), size = 4,
              aes(x = mean(bootres_exp2$t[ ,3], na.rm = TRUE)*20, y = .5)) +
-  geom_errorbarh(data = filter(plot_exp2, Condition == "mismatch"), size = 1, height = .075,
+  geom_errorbarh(data = filter(plot_exp2, Condition == "mismatch"), size = 1, height = .1,
                  aes(y    = .5,
                      xmin = boot::boot.ci(bootres_exp2, index = 3, type = "perc")$percent[4]*20,
                      xmax = boot::boot.ci(bootres_exp2, index = 3, type = "perc")$percent[5]*20)) +
   # bayesian
   geom_point(data = filter(plot_exp2, Condition == "mismatch"), size = 4, colour = "red2",
              aes(x = posterior_mean_mi, y = .6)) +
-  geom_errorbarh(data = filter(plot_exp2, Condition == "mismatch"),size = 1, height = .075, 
+  geom_errorbarh(data = filter(plot_exp2, Condition == "mismatch"),size = 1, height = .1, 
                  aes(y    = .6, 
                      xmin = round(qnorm(c(.025), posterior_mean_mi, posterior_sd_mi)),
                      xmax = round(qnorm(c(.975), posterior_mean_mi, posterior_sd_mi))), colour = "red2") +
@@ -690,7 +696,7 @@ $$
 
 We now have a posterior estimate that predictions in the mismatch condition were 336 ms slower than in the match condition, with a 95\% credible interval of 288--384 ms. This posterior overlaps quite well with the original bootstrap difference distribution, which estimated a difference of 338 ms with a 95th percentile interval of 300--380ms.
 
-<!-- fig.cap="\\label{fig:posterior}Density of the bootstrap difference distribution showing the prior, the likelihood, and now the posterior." -->
+
 
 ```{r, eval= FALSE, fig.height=3.5, fig.width=3.5}
 
@@ -758,7 +764,6 @@ ggplot(subset(df_l1l2, Condition == "dp"), aes(onset)) +
 ```
 
 
-<!-- \FloatBarrier -->
 
 #### Quantifying evidence with a Bayes factor
 
@@ -791,7 +796,7 @@ difference_posterior_sd   <- posterior_sd_exp2
 # plot the ratio
 par(las = 0, mfrow=c(1,1))
 
-plot(density(na.omit(bootstrap_samples$dp)), xlim=c(-1500, 1500), col = "white", yaxt='n',
+plot(density(na.omit(bootstrap_samples$dp)), xlim=c(-1000, 1000), col = "white", yaxt='n',
      xlab = "Match-mismatch onset difference (ms)", 
      main = "Posterior vs. prior density at zero", frame.plot = FALSE)
 # lines(c(0, 0), c(0, .008), lwd = 2, col = "grey")

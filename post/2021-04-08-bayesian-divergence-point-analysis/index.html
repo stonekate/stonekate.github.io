@@ -162,6 +162,8 @@
     <div class="content">
       
       
+<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 
 
 <p>The visual world is a useful paradigm in psycholinguistics for tracking people’s eye fixations as they listen to sentences containing some kind of experimental manipulation. A common question is whether the experimental manipulation makes people fixate on a target object earlier in one condition versus another. To answer this, we need to decide <em>when</em> in each condition people start looking at the target more than other objects. But how do we compare these timepoints between conditions?<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a> We came up with a bootstrapping method for doing this in <a href="https://doi.org/10.1017/S1366728920000607">Stone, Lago &amp; Schad, 2020</a>. However, bootstrapping makes some weird assumptions about data, so here we try to address these by adding Bayesian principles to our bootstrapping method. This was an approach developed with <a href="https://www.jverissimo.net/">João Veríssimo</a>, <a href="https://danielschad.github.io/">Daniel Schad</a>, and <a href="https://sollago.github.io/">Sol Lago</a>, and we apply it in <a href="https://osf.io/3uz7x/">this paper</a>.</p>
@@ -170,7 +172,7 @@
 <p>A full workthrough of our bootstrap procedure can be found in <a href="https://doi.org/10.1017/S1366728920000607">Stone et al., 2020</a>, but for a quick overview here, we use example data from an experiment on using syntactic gender to predict an upcoming noun in German. Participants heard sentences like “<em>Klicke auf seinen blauen…</em>” (click on his.MASC blue.MASC …), while looking at two blue objects on a screen. Only one of the objects matched the gender marking of the pronoun and adjective. There were two experimental conditions: in the <code>match</code> condition, the target object and the object’s owner matched in gender, e.g. <em>seinen Knopf</em> (his button.MASC). In the <code>mismatch</code> condition, the target object and the object’s owner mismatched in gender, e.g. <em>ihren Knopf</em> (her button.MASC).</p>
 <p><img src="images/objects.PNG" style="width:85.0%;height:85.0%" /></p>
 <p>Because of the gender cue on the possessive and adjective (e.g. -en suffix), we expected participants to predict the target object and look preferentially at it before they heard it’s name. What we really wanted to know though was whether predictive looks would be delayed in the mismatch condition where there was a conflicting gender cue, even though the conflicting cue was syntactically irrelevant (i.e. the object’s owner being masculine or feminine has no bearing on what the upcoming object might be). You can already see below that the onset of when participants looked preferentially at the target appears to be later in the mismatch condition:</p>
-<p><img src="/post/2021-04-08-bayesian-divergence-point-analysis/index.en_files/figure-html/unnamed-chunk-1-1.png" width="960" /></p>
+<p><img src="/post/2021-04-08-bayesian-divergence-point-analysis/index.en_files/figure-html/unnamed-chunk-1-1.png" width="576" style="display: block; margin: auto;" /></p>
 <p>But is this “prediction onset” in the mismatch condition <em>significantly</em> later than the match condition? We can find out using our bootstrapping procedure, which has the following steps:</p>
 <ol style="list-style-type: decimal">
 <li>Conduct a statistical test of fixations between the target and competitor at each timepoint in each condition (similar to a permutation test, e.g. <a href="https://doi.org/10.1111/j.1469-8986.2011.01273.x">Groppe, Urbach &amp; Kutas, 2011</a>; <a href="https://doi.org/10.1016/j.jneumeth.2007.03.024">Maris &amp; Oostenveldt, 2007</a>; <a href="https://doi.org/10.1037/a0031813">Barr, Jackson &amp; Phillips, 2014</a>),</li>
@@ -185,9 +187,9 @@
 </ol>
 <p>The unique contribution of our procedure versus existing methods was iii): we estimate the sampling distribution of an onset in each condition, which we can then use to statistically compare onsets between conditions.</p>
 <p>The procedure yields two bootstrap distributions: one distribution each of onsets for the match and mismatch conditions respectively (see below). We take the mean and the 95th percentile confidence interval (CI) of the match/mismatch distributions as an estimate of the prediction onset for each condition and its temporal variability:</p>
-<p><img src="/post/2021-04-08-bayesian-divergence-point-analysis/index.en_files/figure-html/unnamed-chunk-2-1.png" width="960" /></p>
+<p><img src="/post/2021-04-08-bayesian-divergence-point-analysis/index.en_files/figure-html/unnamed-chunk-2-1.png" width="768" style="display: block; margin: auto;" /></p>
 <p>By subtracting the match from the mismatch distribution, we obtain a distribution of differences between conditions. We take the mean and the 95th percentile CI of this difference distribution as the estimated difference in prediction onset. We can decide whether the difference is different from zero by looking at whether the 95th percentile CI of the difference distribution contains zero. Since it does not, we can conclude that the difference between conditions is not zero. Moreover, since all values in the distribution are positive, we can conclude that predictions were slower in the mismatch condition:</p>
-<p><img src="/post/2021-04-08-bayesian-divergence-point-analysis/index.en_files/figure-html/unnamed-chunk-3-1.png" width="288" /></p>
+<p><img src="/post/2021-04-08-bayesian-divergence-point-analysis/index.en_files/figure-html/unnamed-chunk-3-1.png" width="384" style="display: block; margin: auto;" /></p>
 <hr />
 <div id="limitations-of-the-bootstrap-procedure" class="section level4">
 <h4>Limitations of the bootstrap procedure</h4>
@@ -231,7 +233,7 @@
 <p>This is because our prior was relatively uninformative, and so the posteriors are informed more strongly by the bootstrap data than the prior. If we had defined a strongly informative prior to say we were very certain that the prediction onsets would be 1000 ms, e.g. <span class="math inline">\(N(1000, 10)\)</span>, then the posterior would be pulled toward the prior (not completely, as it’s still being informed by the data):</p>
 <p><img src="/post/2021-04-08-bayesian-divergence-point-analysis/index.en_files/figure-html/unnamed-chunk-7-1.png" width="960" /></p>
 <p>How do the Bayesian onsets (red, uninformative priors) compare with the onsets from the original bootstrap procedure (black)? Quite well:</p>
-<p><img src="/post/2021-04-08-bayesian-divergence-point-analysis/index.en_files/figure-html/unnamed-chunk-8-1.png" width="768" /></p>
+<p><img src="/post/2021-04-08-bayesian-divergence-point-analysis/index.en_files/figure-html/unnamed-chunk-8-1.png" width="576" style="display: block; margin: auto;" /></p>
 <p>Now, how to decide whether the mismatch condition was slower? Because the match and mismatch posteriors are normal distributions, we can find the posterior of their difference as the <a href="https://mathworld.wolfram.com/NormalDifferenceDistribution.html">difference of two normal distributions</a>:</p>
 <p><span class="math display">\[ \begin{aligned}
 \mu_{posterior_{difference}} &amp;= \mu_{posterior_{mismatch}} - \mu_{posterior_{match}} \\
@@ -246,8 +248,6 @@
 \end{aligned}
 \]</span></p>
 <p>We now have a posterior estimate that predictions in the mismatch condition were 336 ms slower than in the match condition, with a 95% credible interval of 288–384 ms. This posterior overlaps quite well with the original bootstrap difference distribution, which estimated a difference of 338 ms with a 95th percentile interval of 300–380ms.</p>
-<!-- fig.cap="\\label{fig:posterior}Density of the bootstrap difference distribution showing the prior, the likelihood, and now the posterior." -->
-<!-- \FloatBarrier -->
 <div id="quantifying-evidence-with-a-bayes-factor" class="section level4">
 <h4>Quantifying evidence with a Bayes factor</h4>
 <p>How much evidence do we have that the distribution of match/mismatch prediction onset differences is not zero? Since the likelihood is not normalised, we can use the Savage-Dickey method to compute a Bayes factor (<a href="https://www.jstor.org/stable/2239734">Dickey &amp; Lientz, 1970</a>; <a href="https://doi.org/10.1016/j.cogpsych.2009.12.001">Wagenmakers et al., 2010</a>). This method finds the ratio of prior to posterior density at some point value (e.g. zero). In other words, we are trying to find how much seeing the data has changed our prior belief that the true difference between conditions is zero:</p>
