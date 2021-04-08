@@ -72,7 +72,9 @@ values <- seq(0, 1900, 1)
 
 A full workthrough of our bootstrap procedure can be found in [Stone et al., 2020](https://doi.org/10.1017/S1366728920000607), but for a quick overview here, we use example data from an experiment on using syntactic gender to predict an upcoming noun in German. Participants heard sentences like “*Klicke auf seinen blauen…*” (click on his.MASC blue.MASC ...), while looking at two blue objects on a screen. Only one of the objects matched the gender marking of the pronoun and adjective. There were two experimental conditions: in the `match` condition, the target object and the object's owner matched in gender, e.g. *seinen Knopf* (his button.MASC). In the `mismatch` condition, the target object and the object's owner mismatched in gender, e.g. *ihren Knopf* (her button.MASC). 
 
+<center>
 ![](images/objects.PNG){width=85% height=85%}
+</center>
 
 Because of the gender cue on the possessive and adjective (e.g. -en suffix), we expected participants to predict the target object and look preferentially at it before they heard it's name. What we really wanted to know though was whether predictive looks would be delayed in the mismatch condition where there was a conflicting gender cue, even though the conflicting cue was syntactically irrelevant (i.e. the object's owner being masculine or feminine has no bearing on what the upcoming object might be). You can already see below that the onset of when participants looked preferentially at the target appears to be later in the mismatch condition: 
 
@@ -166,7 +168,7 @@ The procedure yields two bootstrap distributions: one distribution each of onset
 
 
 
-```{r, fig.width=8, fig.height=7, fig.align="center"}
+```{r, fig.width=7, fig.height=6, fig.align="center"}
 
 # Plot Figure 5 of the manuscript
 fig2ai <- ggplot(subset(df_l1l2, Condition == "match"), aes(onset)) + 
@@ -175,13 +177,13 @@ fig2ai <- ggplot(subset(df_l1l2, Condition == "match"), aes(onset)) +
    facet_grid(~Condition, scales = "free", labeller = as_labeller(labels)) + 
    geom_point(data = filter(df_l1l2, Condition == "match"),
               aes(x = (mean(bootres_exp2$t[,2], na.rm = TRUE)-1)*20, y = 30), 
-              size = 6) +
+              size = 5) +
    geom_errorbarh(data = filter(df_l1l2, Condition == "match"),
                   aes(xmin = (boot::boot.ci(bootres_exp2, index = 2, 
                                             type = "perc")$percent[4]-1)*20,
                       xmax = (boot::boot.ci(bootres_exp2, index = 2, 
                                             type = "perc")$percent[5]-1)*20,
-                      y = 30), size = 2, height = 90) +
+                      y = 30), size = 1, height = 90) +
    # aesthetic parameters
    labs(x = "Onset (ms)", y = "Frequency") +
    theme_light() +
@@ -196,13 +198,13 @@ fig2aii <- ggplot(subset(df_l1l2, Condition == "mismatch"), aes(onset)) +
    facet_grid(~Condition, scales = "free", labeller = as_labeller(labels)) + 
    geom_point(data = filter(df_l1l2, Condition == "mismatch"),
               aes(x = (mean(bootres_exp2$t[,3], na.rm = TRUE)-1)*20, y = 120), 
-              size = 6) +
+              size = 5) +
    geom_errorbarh(data = filter(df_l1l2, Condition == "mismatch"),
                   aes(xmin = (boot::boot.ci(bootres_exp2, index = 3, 
                                             type = "perc")$percent[4]-1)*20,
                       xmax = (boot::boot.ci(bootres_exp2, index = 3, 
                                             type = "perc")$percent[5]-1)*20,
-                      y = 120), size = 2, height = 200) +
+                      y = 120), size = 1, height = 200) +
    # aesthetic parameters
    labs(x = "Onset (ms)", y = "Frequency") +
    xlim(c(680, 740)) +
@@ -250,13 +252,13 @@ fig2b <- ggplot(plot_exp2, aes(Time, MeanFixation)) +
   
   # add word stimuli
   geom_text(data = subset(words, Condition == "match"), label = "seinen", y = .15, 
-            x = 0, angle = 90, fontface = "italic", size = 5, colour = "grey50") +
+            x = 0, angle = 90, fontface = "italic", size = 4, colour = "grey50") +
   geom_text(data = subset(words, Condition == "mismatch"), label = "ihren", y = .14, 
-            x = 0, angle = 90, fontface = "italic", size = 5, colour = "grey50") +
+            x = 0, angle = 90, fontface = "italic", size = 4, colour = "grey50") +
   annotate(geom = "text", label = "blauen", x = onsets[1]-60, y = .15, angle = 90,
-           fontface = "italic", size = 5, colour = "grey50") +
+           fontface = "italic", size = 4, colour = "grey50") +
   annotate(geom = "text", label = "Knopf", x = onsets[2]-60, y = .13, angle = 90,
-           fontface = "italic", size = 5, colour = "grey50") +
+           fontface = "italic", size = 4, colour = "grey50") +
 
   # add bootstrapped onset and credible interval in the match condition
   geom_point(data = filter(plot_exp2, Condition == "match"), size = 4,
@@ -416,7 +418,7 @@ posterior_sd_exp2    <- sqrt( posterior_sd_mi^2 + posterior_sd_ma^2 )
 We start with the priors: we reasoned that predictiton onsets could only arise in the 1600 ms time window between the onset of the pronoun and the onset of the noun (adding 200 ms for saccade planning). We therefore specified a normal distribution centered in the middle of this critical window, with a 95% probability of the onset falling between 200 and 1800 ms: $N(1000,400)$. Our prior distributions for the match and mismatch conditions therefore looked like this:
 
 
-```{r, fig.height=4, fig.width=8}
+```{r, fig.height=4, fig.width=8, fig.align="center"}
 
 par(las = 0, mfrow=c(1,2))
 
@@ -449,7 +451,7 @@ lines(prior$dens ~ values, xlim=xlims, lty = 1, lwd = 2)
 Next, we needed a likelihood function. This involved two steps: First, we used the distribution of onsets estimated via the original bootstrap procedure to approximate a likelihood. Second, we used a normal distribution to approximate the likelihood function (i.e., Laplace approximation) under the assumption of the central limit theorem that the distribution underlying the bootstrap distribution was approximately normal^[Using a normal distribution for the likelihood assumes that, with sufficient observations and bootstrap samples, the bootstrap distribution will approach a normal distribution in line with the central limit theorem. However, this is not always the case, as can be seen with our data. An alternative way to define the likelihood would be to use a kernel density estimator instead; we present this approach in the appendices of [this paper](https://osf.io/3uz7x/).]. This gave us a likelihood distribution with a mean and standard deviation derived from the bootstrap data: 
 
 
-```{r, fig.height=4, fig.width=8}
+```{r, fig.height=4, fig.width=8, fig.align="center"}
 
 par(las = 0, mfrow=c(1,2))
 
@@ -499,7 +501,7 @@ $$
 
 Via the same calculation, the posterior for the mismatch onset is 705 ms (SD = 9 ms). We can add these posteriors to our plots and see that they resemble the bootstrap data:
 
-```{r, fig.height=4, fig.width=8}
+```{r, fig.height=4, fig.width=8, fig.align="center"}
 
 par(las = 0, mfrow=c(1,2))
 
@@ -531,7 +533,7 @@ lines(dnorm(0:1900, posterior_mean_mi, posterior_sd_mi), xlim=xlims, col = "red2
 
 This is because our prior was relatively uninformative, and so the posteriors are informed more strongly by the bootstrap data than the prior. If we had defined a strongly informative prior to say we were very certain that the prediction onsets would be 1000 ms, e.g. $N(1000, 10)$, then the posterior would be pulled toward the prior (not completely, as it's still being informed by the data):
 
-```{r, fig.height=4, fig.width=10}
+```{r, fig.height=4, fig.width=10, fig.align="center"}
 
 # compute an analytical posterior
 prior_mean      <- 1000
@@ -698,79 +700,12 @@ We now have a posterior estimate that predictions in the mismatch condition were
 
 
 
-```{r, eval= FALSE, fig.height=3.5, fig.width=3.5}
-
-par(las = 0, mfrow=c(1,1))
-
-
-# add the posterior to the plot
-plot(density(na.omit(bootstrap_samples$dp), bw=10), xlim=c(0, 1500), 
-     ylim=c(0, max(dnorm(0:1900, posterior_mean_exp2, posterior_sd_exp2))),
-     col = "grey50",yaxt='n',
-     xlab = "Match-mismatch onset difference (ms)", 
-     main = "", frame.plot = FALSE)
-lines(dnorm(0:1900, posterior_mean_exp2, posterior_sd_exp2), xlim=c(0, 1500), col = "red2", lwd = 2, lty=1)
-legend("topright", bty = "n", col = c("grey50","red2"), 
-       legend = c("bootstrap data","posterior"),
-       lty = c(1,1), lwd = c(2,2))
-```
-
-
-
-
-```{r, eval=FALSE, fig.height = 3, fig.width = 4}
-
-
-df_l1l2 <- bootstrap_samples %>%
-  gather(key = "Condition", value = "onset")
-
-# Create nicer labels
-labels <- c(match = "Match", 
-            mismatch = "Mismatch", 
-            dp = "Difference\nMatch-Mismatch")
-
-# Order factor levels
-df_l1l2$Condition <- factor(df_l1l2$Condition, levels = c("match", "mismatch", "dp"))
-
-
-# Plot Figure 5 of the manuscript
-ggplot(subset(df_l1l2, Condition == "dp"), aes(onset)) + 
-   geom_histogram(binwidth = 20, fill = "grey30", alpha = .3) +
-   # create a panel for each language group
-   facet_grid(~Condition, scales = "free", labeller = as_labeller(labels)) + 
-   # bootstrap
-   geom_point(data = filter(df_l1l2, Condition == "dp"),
-              aes(x = mean(bootres_exp2$t[,1], na.rm = TRUE)*20, y = 30), 
-              size = 4) +
-   geom_errorbarh(data = filter(df_l1l2, Condition == "dp"),
-                  aes(xmin = boot::boot.ci(bootres_exp2, index = 1, 
-                                            type = "perc")$percent[4]*20,
-                      xmax = boot::boot.ci(bootres_exp2, index = 1, 
-                                            type = "perc")$percent[5]*20,
-                      y = 30), size = 1, height = 25) +
-   # bayes
-   geom_point(data = filter(df_l1l2, Condition == "dp"),
-              aes(x = posterior_mean_exp2, y = 70), size = 4, colour = "red2") +
-   geom_errorbarh(data = filter(df_l1l2, Condition == "dp"),
-                  aes(xmin = round(qnorm(c(.025), posterior_mean_exp2, posterior_sd_exp2)),
-                      xmax = round(qnorm(c(.975), posterior_mean_exp2, posterior_sd_exp2)),
-                      y = 70), size = 1, height = 25, colour = "red2") +   
-   # aesthetic parameters
-   labs(x = "Difference in onsets (ms)", y = "Frequency") +
-   theme_light() +
-   theme(strip.text = element_text(size = 14),
-         text = element_text(size = 12, colour="gray28"),
-         panel.spacing = unit(4, "lines"))
-```
-
-
-
 #### Quantifying evidence with a Bayes factor
 
 \noindent How much evidence do we have that the distribution of match/mismatch prediction onset differences is not zero? Since the likelihood is not normalised, we can use the Savage-Dickey method to compute a Bayes factor ([Dickey & Lientz, 1970](https://www.jstor.org/stable/2239734); [Wagenmakers et al., 2010](https://doi.org/10.1016/j.cogpsych.2009.12.001)). This method finds the ratio of prior to posterior density at some point value (e.g. zero). In other words, we are trying to find how much seeing the data has changed our prior belief that the true difference between conditions is zero: 
 
 
-```{r, fig.height=4, fig.width=4}
+```{r, fig.height=4, fig.width=4, fig.align="center"}
 
 values_diff <- seq(-1500, 1500, 1)
 

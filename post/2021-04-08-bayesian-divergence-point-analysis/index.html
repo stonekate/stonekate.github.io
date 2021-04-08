@@ -170,7 +170,9 @@
 <div id="the-bootstrap-procedure" class="section level3">
 <h3>The bootstrap procedure</h3>
 <p>A full workthrough of our bootstrap procedure can be found in <a href="https://doi.org/10.1017/S1366728920000607">Stone et al., 2020</a>, but for a quick overview here, we use example data from an experiment on using syntactic gender to predict an upcoming noun in German. Participants heard sentences like “<em>Klicke auf seinen blauen…</em>” (click on his.MASC blue.MASC …), while looking at two blue objects on a screen. Only one of the objects matched the gender marking of the pronoun and adjective. There were two experimental conditions: in the <code>match</code> condition, the target object and the object’s owner matched in gender, e.g. <em>seinen Knopf</em> (his button.MASC). In the <code>mismatch</code> condition, the target object and the object’s owner mismatched in gender, e.g. <em>ihren Knopf</em> (her button.MASC).</p>
-<p><img src="images/objects.PNG" style="width:85.0%;height:85.0%" /></p>
+<center>
+<img src="images/objects.PNG" style="width:85.0%;height:85.0%" />
+</center>
 <p>Because of the gender cue on the possessive and adjective (e.g. -en suffix), we expected participants to predict the target object and look preferentially at it before they heard it’s name. What we really wanted to know though was whether predictive looks would be delayed in the mismatch condition where there was a conflicting gender cue, even though the conflicting cue was syntactically irrelevant (i.e. the object’s owner being masculine or feminine has no bearing on what the upcoming object might be). You can already see below that the onset of when participants looked preferentially at the target appears to be later in the mismatch condition:</p>
 <p><img src="/post/2021-04-08-bayesian-divergence-point-analysis/index.en_files/figure-html/unnamed-chunk-1-1.png" width="576" style="display: block; margin: auto;" /></p>
 <p>But is this “prediction onset” in the mismatch condition <em>significantly</em> later than the match condition? We can find out using our bootstrapping procedure, which has the following steps:</p>
@@ -187,7 +189,7 @@
 </ol>
 <p>The unique contribution of our procedure versus existing methods was iii): we estimate the sampling distribution of an onset in each condition, which we can then use to statistically compare onsets between conditions.</p>
 <p>The procedure yields two bootstrap distributions: one distribution each of onsets for the match and mismatch conditions respectively (see below). We take the mean and the 95th percentile confidence interval (CI) of the match/mismatch distributions as an estimate of the prediction onset for each condition and its temporal variability:</p>
-<p><img src="/post/2021-04-08-bayesian-divergence-point-analysis/index.en_files/figure-html/unnamed-chunk-2-1.png" width="768" style="display: block; margin: auto;" /></p>
+<p><img src="/post/2021-04-08-bayesian-divergence-point-analysis/index.en_files/figure-html/unnamed-chunk-2-1.png" width="672" style="display: block; margin: auto;" /></p>
 <p>By subtracting the match from the mismatch distribution, we obtain a distribution of differences between conditions. We take the mean and the 95th percentile CI of this difference distribution as the estimated difference in prediction onset. We can decide whether the difference is different from zero by looking at whether the 95th percentile CI of the difference distribution contains zero. Since it does not, we can conclude that the difference between conditions is not zero. Moreover, since all values in the distribution are positive, we can conclude that predictions were slower in the mismatch condition:</p>
 <p><img src="/post/2021-04-08-bayesian-divergence-point-analysis/index.en_files/figure-html/unnamed-chunk-3-1.png" width="384" style="display: block; margin: auto;" /></p>
 <hr />
@@ -207,9 +209,9 @@
 <h3>Adding Bayesian principles</h3>
 <p><a href="https://en.wikipedia.org/wiki/Bayesian_inference">Bayesian inference</a> estimates our certainty about an event based on our prior knowledge about the probability of that event and new data. In our case, the event is prediction onsets. We can estimate our certainty about prediction onsets via Bayes’ theorem, which estimates a <a href="https://en.wikipedia.org/wiki/Posterior_probability">posterior probability distribution</a> using two components: priors to encode our expectations about when the onset could be, and data to inform posterior inference via a <a href="https://en.wikipedia.org/wiki/Likelihood_function">likelihood function</a><a href="#fn3" class="footnote-ref" id="fnref3"><sup>3</sup></a>.</p>
 <p>We start with the priors: we reasoned that predictiton onsets could only arise in the 1600 ms time window between the onset of the pronoun and the onset of the noun (adding 200 ms for saccade planning). We therefore specified a normal distribution centered in the middle of this critical window, with a 95% probability of the onset falling between 200 and 1800 ms: <span class="math inline">\(N(1000,400)\)</span>. Our prior distributions for the match and mismatch conditions therefore looked like this:</p>
-<p><img src="/post/2021-04-08-bayesian-divergence-point-analysis/index.en_files/figure-html/unnamed-chunk-4-1.png" width="768" /></p>
+<p><img src="/post/2021-04-08-bayesian-divergence-point-analysis/index.en_files/figure-html/unnamed-chunk-4-1.png" width="768" style="display: block; margin: auto;" /></p>
 <p>Next, we needed a likelihood function. This involved two steps: First, we used the distribution of onsets estimated via the original bootstrap procedure to approximate a likelihood. Second, we used a normal distribution to approximate the likelihood function (i.e., Laplace approximation) under the assumption of the central limit theorem that the distribution underlying the bootstrap distribution was approximately normal<a href="#fn4" class="footnote-ref" id="fnref4"><sup>4</sup></a>. This gave us a likelihood distribution with a mean and standard deviation derived from the bootstrap data:</p>
-<p><img src="/post/2021-04-08-bayesian-divergence-point-analysis/index.en_files/figure-html/unnamed-chunk-5-1.png" width="768" /></p>
+<p><img src="/post/2021-04-08-bayesian-divergence-point-analysis/index.en_files/figure-html/unnamed-chunk-5-1.png" width="768" style="display: block; margin: auto;" /></p>
 <p>Finally, we can now find the posterior distribution as the product of the prior and the likelihood. Because the prior and the likelihood are normal distributions, the posteriors for each condition can be derived analytically as the <a href="https://ccrma.stanford.edu/~jos/sasp/Product_Two_Gaussian_PDFs.html">product of two Gaussian probability density functions</a>, where</p>
 <ul>
 <li><span class="math inline">\(N(\mu_{prior},\sigma_{prior})\)</span> is the prior,</li>
@@ -229,9 +231,9 @@
 \end{aligned}
 \]</span></p>
 <p>Via the same calculation, the posterior for the mismatch onset is 705 ms (SD = 9 ms). We can add these posteriors to our plots and see that they resemble the bootstrap data:</p>
-<p><img src="/post/2021-04-08-bayesian-divergence-point-analysis/index.en_files/figure-html/unnamed-chunk-6-1.png" width="768" /></p>
+<p><img src="/post/2021-04-08-bayesian-divergence-point-analysis/index.en_files/figure-html/unnamed-chunk-6-1.png" width="768" style="display: block; margin: auto;" /></p>
 <p>This is because our prior was relatively uninformative, and so the posteriors are informed more strongly by the bootstrap data than the prior. If we had defined a strongly informative prior to say we were very certain that the prediction onsets would be 1000 ms, e.g. <span class="math inline">\(N(1000, 10)\)</span>, then the posterior would be pulled toward the prior (not completely, as it’s still being informed by the data):</p>
-<p><img src="/post/2021-04-08-bayesian-divergence-point-analysis/index.en_files/figure-html/unnamed-chunk-7-1.png" width="960" /></p>
+<p><img src="/post/2021-04-08-bayesian-divergence-point-analysis/index.en_files/figure-html/unnamed-chunk-7-1.png" width="960" style="display: block; margin: auto;" /></p>
 <p>How do the Bayesian onsets (red, uninformative priors) compare with the onsets from the original bootstrap procedure (black)? Quite well:</p>
 <p><img src="/post/2021-04-08-bayesian-divergence-point-analysis/index.en_files/figure-html/unnamed-chunk-8-1.png" width="576" style="display: block; margin: auto;" /></p>
 <p>Now, how to decide whether the mismatch condition was slower? Because the match and mismatch posteriors are normal distributions, we can find the posterior of their difference as the <a href="https://mathworld.wolfram.com/NormalDifferenceDistribution.html">difference of two normal distributions</a>:</p>
@@ -251,7 +253,7 @@
 <div id="quantifying-evidence-with-a-bayes-factor" class="section level4">
 <h4>Quantifying evidence with a Bayes factor</h4>
 <p>How much evidence do we have that the distribution of match/mismatch prediction onset differences is not zero? Since the likelihood is not normalised, we can use the Savage-Dickey method to compute a Bayes factor (<a href="https://www.jstor.org/stable/2239734">Dickey &amp; Lientz, 1970</a>; <a href="https://doi.org/10.1016/j.cogpsych.2009.12.001">Wagenmakers et al., 2010</a>). This method finds the ratio of prior to posterior density at some point value (e.g. zero). In other words, we are trying to find how much seeing the data has changed our prior belief that the true difference between conditions is zero:</p>
-<p><img src="/post/2021-04-08-bayesian-divergence-point-analysis/index.en_files/figure-html/unnamed-chunk-11-1.png" width="384" /></p>
+<p><img src="/post/2021-04-08-bayesian-divergence-point-analysis/index.en_files/figure-html/unnamed-chunk-9-1.png" width="384" style="display: block; margin: auto;" /></p>
 <p>We compute the ratio via the equation below, where</p>
 <ul>
 <li><span class="math inline">\(\theta\)</span> is the point at which we want to compare densities (e.g. zero),</li>
