@@ -1,5 +1,5 @@
 ---
-title: Bayesian divergence point analysis
+title: Bayesian divergence point analysis of visual world data
 author: Kate Stone
 date: '2021-04-08'
 #slug: []
@@ -65,12 +65,12 @@ values <- seq(0, 1900, 1)
 ```
 
 
-\noindent The visual world is a useful paradigm in psycholinguistics for tracking people's eye fixations as they listen to sentences containing some kind of experimental manipulation. A common question is whether the experimental manipulation makes people fixate on a target object earlier in one condition versus another. To answer this, we need to decide *when* in each condition people start looking at the target more than other objects. But how do we compare these timepoints between conditions?^[There are actually several existing methods for answering temporal questions about visual world data, including [cluster permutation](https://doi.org/10.1037/a0031813), [BDOTS](https://doi.org/10.1016/j.jml.2018.05.004), and GAMMs. We summarise these in [Stone et al., 2020](https://doi.org/10.1017/S1366728920000607) and describe why they weren't able to answer the specific question we had for the above experiment, which was whether one condition's onset was significantly faster than another.] We came up with a bootstrapping method for doing this in [Stone, Lago & Schad, 2020](https://doi.org/10.1017/S1366728920000607). However, bootstrapping makes some weird assumptions about data, so here we try to address these by adding Bayesian principles to our bootstrapping method. This was an approach developed with [João Veríssimo](https://www.jverissimo.net/), [Daniel Schad](https://danielschad.github.io/), and [Sol Lago](https://sollago.github.io/), and we apply it in [this paper](https://osf.io/3uz7x/).
+\noindent The visual world is a useful paradigm in psycholinguistics for tracking people's eye fixations as they listen to sentences containing some kind of experimental manipulation. A common question is whether the experimental manipulation makes people fixate on a target object earlier in one condition versus another. To answer this, we need to decide *when* in each condition people start looking at the target more than other objects and then compare these timepoints between conditions. But this is not as straightforward as it sounds!^[There are several existing methods for answering temporal questions about visual world data, including [cluster permutation](https://doi.org/10.1037/a0031813), [BDOTS](https://doi.org/10.1016/j.jml.2018.05.004), and GAMMs. We summarise these in [Stone et al., 2020](https://doi.org/10.1017/S1366728920000607) and outline why they weren't able to answer our specific question about whether one onset is significantly faster than another.] We came up with a bootstrapping method to do this in [Stone, Lago & Schad, 2020](https://doi.org/10.1017/S1366728920000607). However, bootstrapping makes some weird assumptions about data and so here we try to improve on these by adding Bayesian principles to our method. This was an approach developed with [João Veríssimo](https://www.jverissimo.net/), [Daniel Schad](https://danielschad.github.io/), and [Sol Lago](https://sollago.github.io/), and we apply it in [this paper](https://osf.io/3uz7x/).
 
 
 ### The bootstrap procedure
 
-A full workthrough of our bootstrap procedure can be found in [Stone et al., 2020](https://doi.org/10.1017/S1366728920000607), but for a quick overview here, we use example data from an experiment on using syntactic gender to predict an upcoming noun in German. Participants heard sentences like “*Klicke auf seinen blauen…*” (click on his.MASC blue.MASC ...), while looking at two blue objects on a screen. Only one of the objects matched the gender marking of the pronoun and adjective. There were two experimental conditions: in the `match` condition, the target object and the object's owner matched in gender, e.g. *seinen Knopf* (his button.MASC). In the `mismatch` condition, the target object and the object's owner mismatched in gender, e.g. *ihren Knopf* (her button.MASC). 
+A full workthrough of our bootstrap procedure can be found in [Stone et al., 2020](https://doi.org/10.1017/S1366728920000607), but for a quick overview here, we use example data from an experiment on using syntactic gender to predict an upcoming noun in German. Participants heard sentences like “*Klicke auf seinen blauen…*” (click on his.~MASC~ blue.~MASC~ ...), while looking at two blue objects on a screen. Only one of the objects matched the gender marking of the pronoun and adjective. There were two experimental conditions: in the `match` condition, the target object and the object's owner matched in gender, e.g. *seinen Knopf* (his button.~MASC~). In the `mismatch` condition, the target object and the object's owner mismatched in gender, e.g. *ihren Knopf* (her button.~MASC~). 
 
 <center>
 ![](images/objects.PNG){width=85% height=85%}
@@ -448,7 +448,7 @@ lines(prior$dens ~ values, xlim=xlims, lty = 1, lwd = 2)
 
 ```
 
-Next, we needed a likelihood function. This involved two steps: First, we used the distribution of onsets estimated via the original bootstrap procedure to approximate a likelihood. Second, we used a normal distribution to approximate the likelihood function (i.e., Laplace approximation) under the assumption of the central limit theorem that the distribution underlying the bootstrap distribution was approximately normal^[Using a normal distribution for the likelihood assumes that, with sufficient observations and bootstrap samples, the bootstrap distribution will approach a normal distribution in line with the central limit theorem. However, this is not always the case, as can be seen with our data. An alternative way to define the likelihood would be to use a kernel density estimator instead; we present this approach in the appendices of [this paper](https://osf.io/3uz7x/).]. This gave us a likelihood distribution with a mean and standard deviation derived from the bootstrap data: 
+Next, we needed a likelihood function. This involved two steps: We used the bootstrap data to approximate a likelihood and a normal distribution to approximate a likelihood function (i.e. Laplace approximation). This was based on the assumption of the central limit theorem that the distribution underlying the bootstrap data was approximately normal^[Using a normal distribution for the likelihood assumes that, with sufficient observations and bootstrap samples, the bootstrap distribution will approach a normal distribution in line with the central limit theorem. However, this is not always the case, as can be seen with our data. An alternative way to define the likelihood would be to use a kernel density estimator instead; we present this approach in the appendices of [this paper](https://osf.io/3uz7x/).]. This gave us a likelihood distribution with a mean and standard deviation derived from the bootstrap data: 
 
 
 ```{r, fig.height=4, fig.width=8, fig.align="center"}
@@ -531,7 +531,7 @@ lines(dnorm(0:1900, posterior_mean_mi, posterior_sd_mi), xlim=xlims, col = "red2
 ```
 
 
-This is because our prior was relatively uninformative, and so the posteriors are informed more strongly by the bootstrap data than the prior. If we had defined a strongly informative prior to say we were very certain that the prediction onsets would be 1000 ms, e.g. $N(1000, 10)$, then the posterior would be pulled toward the prior (not completely, as it's still being informed by the data):
+This is because our prior was relatively uninformative, and so the posteriors are informed more strongly by the bootstrap data than by the prior. If we had defined a strongly informative prior to say we were very certain that the prediction onsets would be 1000 ms, e.g. $N(1000, 10)$, then the posterior would be pulled toward the prior (not completely, as it's still being informed by the data):
 
 ```{r, fig.height=4, fig.width=10, fig.align="center"}
 
@@ -696,13 +696,13 @@ $$ \begin{aligned}
 \end{aligned}
 $$
 
-We now have a posterior estimate that predictions in the mismatch condition were 336 ms slower than in the match condition, with a 95\% credible interval of 288--384 ms. This posterior overlaps quite well with the original bootstrap difference distribution, which estimated a difference of 338 ms with a 95th percentile interval of 300--380ms.
+We now have a posterior estimate that predictions in the mismatch condition were 336 ms slower than in the match condition, with a 95\% credible interval of 288--384 ms. This posterior aligns quite well with the original bootstrap difference distribution, which estimated a difference of 338 ms with a 95th percentile interval of 300--380ms.
 
 
 
 #### Quantifying evidence with a Bayes factor
 
-\noindent How much evidence do we have that the distribution of match/mismatch prediction onset differences is not zero? Since the likelihood is not normalised, we can use the Savage-Dickey method to compute a Bayes factor ([Dickey & Lientz, 1970](https://www.jstor.org/stable/2239734); [Wagenmakers et al., 2010](https://doi.org/10.1016/j.cogpsych.2009.12.001)). This method finds the ratio of prior to posterior density at some point value (e.g. zero). In other words, we are trying to find how much seeing the data has changed our prior belief that the true difference between conditions is zero: 
+\noindent How much has seeing the data changed our prior belief that the true difference between conditions is zero? Since the likelihood is not normalised, we can use the Savage-Dickey method to compute a Bayes factor ([Dickey & Lientz, 1970](https://www.jstor.org/stable/2239734); [Wagenmakers et al., 2010](https://doi.org/10.1016/j.cogpsych.2009.12.001)). This method finds the ratio of prior to posterior density at some point value (e.g. zero): 
 
 
 ```{r, fig.height=4, fig.width=4, fig.align="center"}
@@ -737,8 +737,8 @@ plot(density(na.omit(bootstrap_samples$dp)), xlim=c(-1000, 1000), col = "white",
 # lines(c(0, 0), c(0, .008), lwd = 2, col = "grey")
 lines(dnorm(0:1500, posterior_mean_exp2, posterior_sd_exp2), xlim=c(-500, 1500), col = "red2", lwd = 2, lty=1)
 lines(prior_diff$dens ~ values_diff, xlim=c(-500, 1500), lty = 1, lwd = 2)
-points(0, pointhyp.dens.prior, cex = 2, pch = 21, bg = "grey")
-points(0, pointhyp.dens.posterior, cex = 2, pch = 21, bg = "pink", col = "red2")
+points(0, pointhyp.dens.prior, cex = 1.5, pch = 21, bg = "grey")
+points(0, pointhyp.dens.posterior, cex = 1.5, pch = 21, bg = "pink", col = "red2")
 legend("topleft", bty = "n", 
        legend = c("prior density\nat zero","\nposterior density\nat zero"),
        pch = c(21,21), pt.bg = c("grey","pink"), pt.cex = c(2,2), col = c("black","red2"))
@@ -772,7 +772,7 @@ density_posterior_null <- dnorm(null_hypothesis,
 
 ```
 
-Because the posterior density at zero is less than the prior density (in fact, the posterior density is almost zero), the Bayes factor strongly favours the alternative hypothesis that there is a match/mismatch difference:
+Because the posterior density at zero is less than the prior density (in fact, the posterior density at zero is almost zero), the Bayes factor strongly favours the alternative hypothesis that there is a match/mismatch difference:
 
 
 ```{r, echo=TRUE}

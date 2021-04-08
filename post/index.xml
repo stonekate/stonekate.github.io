@@ -8,12 +8,12 @@
     <language>en</language>
     <lastBuildDate>Thu, 08 Apr 2021 00:00:00 +0000</lastBuildDate><atom:link href="/post/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>Bayesian divergence point analysis</title>
+      <title>Bayesian divergence point analysis of visual world data</title>
       <link>/post/2021-04-08-bayesian-divergence-point-analysis/</link>
       <pubDate>Thu, 08 Apr 2021 00:00:00 +0000</pubDate>
       
       <guid>/post/2021-04-08-bayesian-divergence-point-analysis/</guid>
-      <description>The visual world is a useful paradigm in psycholinguistics for tracking people’s eye fixations as they listen to sentences containing some kind of experimental manipulation. A common question is whether the experimental manipulation makes people fixate on a target object earlier in one condition versus another. To answer this, we need to decide when in each condition people start looking at the target more than other objects. But how do we compare these timepoints between conditions?</description>
+      <description>The visual world is a useful paradigm in psycholinguistics for tracking people’s eye fixations as they listen to sentences containing some kind of experimental manipulation. A common question is whether the experimental manipulation makes people fixate on a target object earlier in one condition versus another. To answer this, we need to decide when in each condition people start looking at the target more than other objects and then compare these timepoints between conditions.</description>
     </item>
     
   </channel>
