@@ -733,7 +733,7 @@ par(las = 0, mfrow=c(1,1))
 
 plot(density(na.omit(bootstrap_samples$dp)), xlim=c(-1000, 1000), col = "white", yaxt='n',
      xlab = "Match-mismatch onset difference (ms)", 
-     main = "Posterior vs. prior density at zero", frame.plot = FALSE)
+     main = "", frame.plot = FALSE)
 # lines(c(0, 0), c(0, .008), lwd = 2, col = "grey")
 lines(dnorm(0:1500, posterior_mean_exp2, posterior_sd_exp2), xlim=c(-500, 1500), col = "red2", lwd = 2, lty=1)
 lines(prior_diff$dens ~ values_diff, xlim=c(-500, 1500), lty = 1, lwd = 2)
