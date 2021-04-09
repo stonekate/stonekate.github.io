@@ -2,36 +2,36 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Kate Stone | University of Potsdam</title>
-    <link>home/</link>
+    <link>/</link>
     <description>Recent content on Kate Stone | University of Potsdam</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Thu, 08 Apr 2021 00:00:00 +0000</lastBuildDate><atom:link href="home/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Thu, 08 Apr 2021 00:00:00 +0000</lastBuildDate><atom:link href="/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Bayesian divergence point analysis of visual world data</title>
-      <link>home/blog/2021-04-08-bayesian-divergence-point-analysis/</link>
+      <link>/blog/2021-04-08-bayesian-divergence-point-analysis/</link>
       <pubDate>Thu, 08 Apr 2021 00:00:00 +0000</pubDate>
       
-      <guid>home/blog/2021-04-08-bayesian-divergence-point-analysis/</guid>
+      <guid>/blog/2021-04-08-bayesian-divergence-point-analysis/</guid>
       <description>The visual world is a useful paradigm in psycholinguistics for tracking people’s eye fixations as they listen to sentences containing some kind of experimental manipulation. A common question is whether the experimental manipulation makes people fixate on a target object earlier in one condition versus another. To answer this, we need to decide when in each condition people start looking at the target more than at other objects and then compare these timepoints between conditions.</description>
     </item>
     
     <item>
       <title>About me</title>
-      <link>home/home/</link>
+      <link>/home/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>home/home/</guid>
+      <guid>/home/</guid>
       <description>I am a psycholinguist in the Cognitive Neuroscience Lab and the Vasishth Lab at the University of Potsdam, Germany. My interest is in probabilistic sentence processing and what this tells us about how words are stored and accessed in the brain. More generally, I am interested in how different fields such as neuroscience, computer science and linguistics can inform each other to build comprehensive theories of human cognition.
 CV PhD Cognitive Science (University of Potsdam, Germany)</description>
     </item>
     
     <item>
       <title>Publications</title>
-      <link>home/publications/</link>
+      <link>/publications/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>home/publications/</guid>
+      <guid>/publications/</guid>
       <description>Papers Stone, K., Veríssimo, J., Schad, D., Oltrogge, E., Vasishth, S., &amp;amp; Lago, S. (in revision) The interaction of grammatically distinct agreement dependencies in predictive processing. [preprint]
 Stone, K., Nicenboim, B., Vasishth, S., &amp;amp; Rösler, F. (Stage 1 RR accepted) Understanding the effects of constraint and predictability in ERP. Neurobiology of Language.
 Stone, K., von der Malsburg, T., &amp;amp; Vasishth, S. (2020) The effect of decay and lexical uncertainty on processing long-distance dependencies in reading.</description>
