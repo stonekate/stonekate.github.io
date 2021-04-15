@@ -14,9 +14,9 @@ header-includes:
 - <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script> # seems to be necessary for pandoc
 #- <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script> # would be for mathjax except I used Yihui's solution in the footer partial
 - <img src="/images/snorkelling2.PNG" alt="tetapare">
-output:
-  html_document:
-    keep_md: yes # do this for each blog post
+#output:
+#  html_document:
+#    keep_md: yes # do this for each blog post
 always_allow_html: true # needs to be in each blog yaml header so that any html in an md file is rendered
 ---
 

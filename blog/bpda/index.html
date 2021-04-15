@@ -161,120 +161,139 @@
     </div>
     <div class="content">
       
-      <p>The visual world is a useful paradigm in psycholinguistics for tracking people&rsquo;s eye fixations as they listen to sentences containing some kind of experimental manipulation. A common question is whether the experimental manipulation makes people look at a target object earlier in one condition than another. To answer this, we need to decide <em>when</em> in each condition people start looking at the target and compare these timepoints between conditions. But this is not as straightforward as it sounds!^[There are several existing methods for answering temporal questions about visual world data, including <a href="https://doi.org/10.1037/a0031813">cluster permutation</a>, <a href="https://doi.org/10.1016/j.jml.2018.05.004">BDOTS</a>, and GAMMs. We summarise these in <a href="https://doi.org/10.1017/S1366728920000607">Stone et al., 2020</a> and outline why they weren&rsquo;t able to answer our specific question about whether one onset was significantly faster than another.] We came up with a bootstrapping method to do this in <a href="https://doi.org/10.1017/S1366728920000607">Stone, Lago &amp; Schad, 2020</a>. However, bootstrapping makes some unlikely assumptions about data&mdash;I&rsquo;ll come to these later&mdash;and so here we try to improve on these assumptions by adding Bayesian principles to our method. This was an approach developed with <a href="https://www.jverissimo.net/">João Veríssimo</a>, <a href="https://danielschad.github.io/">Daniel Schad</a>, and <a href="https://sollago.github.io/">Sol Lago</a>, and we apply it in <a href="https://osf.io/3uz7x/">this paper</a>.</p>
-<h3 id="the-bootstrap-procedure">The bootstrap procedure</h3>
-<p>A full workthrough of our bootstrap procedure can be found in <a href="https://doi.org/10.1017/S1366728920000607">Stone et al., 2020</a>, but for a quick overview here, we use example data from an experiment on using syntactic gender to predict an upcoming noun in German. Participants heard sentences like “<em>Klicke auf seinen blauen…</em>” (click on his.~MASC~ blue.~MASC~ &hellip;), while looking at two blue objects on a screen. Only one of the objects matched the gender marking of the pronoun and adjective. There were two experimental conditions: in the <code>match</code> condition, the target object and the object&rsquo;s owner matched in gender, e.g. <em>seinen Knopf</em> (his button.~MASC~). In the <code>mismatch</code> condition, the target object and the object&rsquo;s owner mismatched in gender, e.g. <em>ihren Knopf</em> (her button.~MASC~).</p>
+      
+<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+<img src="/images/snorkelling2.PNG" alt="tetapare">
+
+
+<p>The visual world is a useful paradigm in psycholinguistics for tracking people’s eye fixations as they listen to sentences containing some kind of experimental manipulation. A common question is whether the experimental manipulation makes people look at a target object earlier in one condition than another. To answer this, we need to decide <em>when</em> in each condition people start looking at the target and compare these timepoints between conditions. But this is not as straightforward as it sounds!<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a> We came up with a bootstrapping method to do this in <a href="https://doi.org/10.1017/S1366728920000607">Stone, Lago &amp; Schad, 2020</a>. However, bootstrapping makes some unlikely assumptions about data—I’ll come to these later—and so here we try to improve on these assumptions by adding Bayesian principles to our method. This was an approach developed with <a href="https://www.jverissimo.net/">João Veríssimo</a>, <a href="https://danielschad.github.io/">Daniel Schad</a>, and <a href="https://sollago.github.io/">Sol Lago</a>, and we apply it in <a href="https://osf.io/3uz7x/">this paper</a>.</p>
+<div id="the-bootstrap-procedure" class="section level3">
+<h3>The bootstrap procedure</h3>
+<p>A full workthrough of our bootstrap procedure can be found in <a href="https://doi.org/10.1017/S1366728920000607">Stone et al., 2020</a>, but for a quick overview here, we use example data from an experiment on using syntactic gender to predict an upcoming noun in German. Participants heard sentences like “<em>Klicke auf seinen blauen…</em>” (click on his.<sub>MASC</sub> blue.<sub>MASC</sub> …), while looking at two blue objects on a screen. Only one of the objects matched the gender marking of the pronoun and adjective. There were two experimental conditions: in the <code>match</code> condition, the target object and the object’s owner matched in gender, e.g. <em>seinen Knopf</em> (his button.<sub>MASC</sub>). In the <code>mismatch</code> condition, the target object and the object’s owner mismatched in gender, e.g. <em>ihren Knopf</em> (her button.<sub>MASC</sub>).</p>
 <center>
-![](images/objects.PNG){width=85% height=85%}
+<img src="/images/objects.PNG" style="width:85.0%;height:85.0%" />
 </center>
-<p>Because of the gender cue on the possessive and adjective (e.g. -en suffix), we expected participants to predict the target object and look preferentially at it before they heard its name. What we really wanted to know though was whether predictive looks would be delayed in the mismatch condition where there was a conflicting gender cue, even though the conflicting cue was syntactically irrelevant (i.e. the object&rsquo;s owner being masculine or feminine has no bearing on what the upcoming object might be). You can already see below that the onset of when participants looked preferentially at the target appears to be later in the mismatch condition:</p>
+<!-- ```{r, fig.align="center"} -->
+<!-- knitr::include_graphics("/images/objects.PNG") -->
+<!-- ``` -->
+<p>Because of the gender cue on the possessive and adjective (e.g. -en suffix), we expected participants to predict the target object and look preferentially at it before they heard its name. What we really wanted to know though was whether predictive looks would be delayed in the mismatch condition where there was a conflicting gender cue, even though the conflicting cue was syntactically irrelevant (i.e. the object’s owner being masculine or feminine has no bearing on what the upcoming object might be). You can already see below that the onset of when participants looked preferentially at the target appears to be later in the mismatch condition:</p>
 <p><img src="/blog/bpda_files/figure-html/unnamed-chunk-1-1.png" width="576" style="display: block; margin: auto;" /></p>
-<p>But is this &ldquo;prediction onset&rdquo; in the mismatch condition <em>significantly</em> later than the match condition? We can find out using our bootstrapping procedure, which has the following steps:</p>
-<ol>
-<li>Conduct a statistical test of fixations between the target and competitor at each timepoint in each condition (similar to a permutation test, e.g. <a href="https://doi.org/10.1111/j.1469-8986.2011.01273.x">Groppe, Urbach &amp; Kutas, 2011</a>; <a href="https://doi.org/10.1016/j.jneumeth.2007.03.024">Maris &amp; Oostenveldt, 2007</a>; <a href="https://doi.org/10.1037/a0031813">Barr, Jackson &amp; Phillips, 2014</a>),</li>
-<li>Decide on an alpha (usually 0.05) and find the first significant test statistic in a run of five consecutive significant test statistics (<a href="https://doi.org/10.1080/13506285.2012.693548">Sheridan &amp; Reingold, 2012</a>; <a href="https://doi.org/10.3389/fpsyg.2014.01432">Reingold &amp; Sheridan, 2014</a> take a similar approach).^[Depending on your experimental manipulation (e.g. how big or sustained you expect your experimental effect to be) and how you&rsquo;ve set up your data (e.g. binned, unbinned, eye tracker sampling rate), your criterion for the number of consecutive significant tests may differ.] This was our divergence point for each condition, which we consider the onset of evidence for predictions,</li>
+<p>But is this “prediction onset” in the mismatch condition <em>significantly</em> later than the match condition? We can find out using our bootstrapping procedure, which has the following steps:</p>
+<ol style="list-style-type: decimal">
+<li>Conduct a statistical test of fixations between the target and competitor at each timepoint in each condition (similar to a permutation test, e.g. <a href="https://doi.org/10.1111/j.1469-8986.2011.01273.x">Groppe, Urbach &amp; Kutas, 2011</a>; <a href="https://doi.org/10.1016/j.jneumeth.2007.03.024">Maris &amp; Oostenveldt, 2007</a>; <a href="https://doi.org/10.1037/a0031813">Barr, Jackson &amp; Phillips, 2014</a>),</li>
+<li>Decide on an alpha (usually 0.05) and find the first significant test statistic in a run of five consecutive significant test statistics (<a href="https://doi.org/10.1080/13506285.2012.693548">Sheridan &amp; Reingold, 2012</a>; <a href="https://doi.org/10.3389/fpsyg.2014.01432">Reingold &amp; Sheridan, 2014</a> take a similar approach).<a href="#fn2" class="footnote-ref" id="fnref2"><sup>2</sup></a> This was our divergence point for each condition, which we consider the onset of evidence for predictions,</li>
 <li>Resample the data 2000 times with replacement and repeat steps 1-2 after each resample.</li>
 </ol>
-<p>\noindent The procedure thus has 3 distinct components:</p>
-<p>i) a set of statistical tests comparing fixations to the target vs. competitor, 
-ii) a criterion for deciding where the onset is, and 
-iii) a way to generate a distribution of these onsets (resampling).</p>
+<p>The procedure thus has 3 distinct components:</p>
+<ol style="list-style-type: lower-roman">
+<li>a set of statistical tests comparing fixations to the target vs. competitor,</li>
+<li>a criterion for deciding where the onset is, and</li>
+<li>a way to generate a distribution of these onsets (resampling).</li>
+</ol>
 <p>The unique contribution of our procedure versus existing methods was iii): we estimate the sampling distribution of an onset in each condition, which we can then use to statistically compare onsets between conditions.</p>
 <p>The procedure yields two bootstrap distributions: one distribution each of onsets for the match and mismatch conditions. We take the mean and the 95th percentile confidence interval (CI) of the match/mismatch distributions as an estimate of the prediction onset for each condition and its temporal variability:</p>
 <p><img src="/blog/bpda_files/figure-html/unnamed-chunk-2-1.png" width="672" style="display: block; margin: auto;" /></p>
 <p>By subtracting the match from the mismatch distribution, we obtain a distribution of differences between conditions. We take the mean and the 95th percentile CI of this difference distribution as the estimated difference in prediction onset. We can decide whether the difference is different from zero by looking at whether the 95th percentile CI of the difference distribution contains zero. Since it does not, we can conclude that the difference between conditions is not zero. Moreover, since all values in the distribution are positive, we can conclude that predictions were slower in the mismatch condition:</p>
 <p><img src="/blog/bpda_files/figure-html/unnamed-chunk-3-1.png" width="384" style="display: block; margin: auto;" /></p>
-<hr>
-<h4 id="limitations-of-the-bootstrap-procedure">Limitations of the bootstrap procedure</h4>
-<p>\noindent As mentioned earlier, the bootstrap makes some unlikely assumptions (<a href="http://www.sumsar.net/blog/2015/04/the-non-parametric-bootstrap-as-a-bayesian-model/">Bååth, 2018</a>):</p>
+<hr />
+<div id="limitations-of-the-bootstrap-procedure" class="section level4">
+<h4>Limitations of the bootstrap procedure</h4>
+<p>As mentioned earlier, the bootstrap makes some unlikely assumptions (<a href="http://www.sumsar.net/blog/2015/04/the-non-parametric-bootstrap-as-a-bayesian-model/">Bååth, 2018</a>):</p>
 <ul>
 <li>Any values not seen in the observed data are impossible</li>
 <li>Each value in the observed data has an equal probability of occurring every time the experiment is run</li>
 <li>We have no prior knowledge about what datapoints might be observed</li>
 </ul>
 <p>These assumptions limit our interpretation of the results. Another limitation of our procedure above is that while it allows us to conclude that there is a significant difference between match and mismatch prediction onsets, it does not allow us to quantify <em>how much</em> evidence we have for this conclusion.</p>
-<hr>
-<h3 id="adding-bayesian-principles">Adding Bayesian principles</h3>
-<p><a href="https://en.wikipedia.org/wiki/Bayesian_inference">Bayesian inference</a> estimates our certainty about an event based on our prior knowledge about the probability of that event and new data. In our case, the event is prediction onsets. We can estimate our certainty about prediction onsets via Bayes' theorem, which estimates a <a href="https://en.wikipedia.org/wiki/Posterior_probability">posterior probability distribution</a> using two components: priors to encode our expectations about when the onset could be, and data to inform posterior inference via a <a href="https://en.wikipedia.org/wiki/Likelihood_function">likelihood function</a>^[Other possibilities for adding Bayesian principles to our procedure could have been to use the Bayesian Bootstrap (<a href="https://doi.org/10.1214/aos/1176345338">Rubin, 1981</a>), implemented in R in <code>bayesboot</code> <a href="http://www.sumsar.net/blog/2016/02/bayesboot-an-r-package/">(Bååth, 2018)</a>. Unfortunately, <code>bayesboot</code> didn&rsquo;t suit our particular bootstrapping method, partly because it doesn&rsquo;t take a multi-step function like ours (see steps 1-3 above), but also because it doesn&rsquo;t take more informative priors&mdash;at least not currently. Alternatively, we could have fit e.g. GLMMs in <code>brms</code> <a href="https://github.com/paul-buerkner/brms">(Bürkner, 2018)</a> to test between fixation proportions at each timepoint (step 1). But this would only apply Bayesian inference to estimating the <em>magnitude</em> of the difference in fixations between target and competitor at each timepoint, when what we really want is to apply it to finding the temporal variability of the onset.].</p>
-<p>We start with the priors: we reasoned that predictiton onsets could only arise in the 1600 ms time window between the onset of the pronoun and the onset of the noun (adding 200 ms for saccade planning). We therefore specified a normal distribution centered in the middle of this critical window, with a 95% probability of the onset falling between 200 and 1800 ms: <code>\(N(1000,400)\)</code>. Our prior distributions for the match and mismatch conditions therefore looked like this:</p>
+<hr />
+</div>
+</div>
+<div id="adding-bayesian-principles" class="section level3">
+<h3>Adding Bayesian principles</h3>
+<p><a href="https://en.wikipedia.org/wiki/Bayesian_inference">Bayesian inference</a> estimates our certainty about an event based on our prior knowledge about the probability of that event and new data. In our case, the event is prediction onsets. We can estimate our certainty about prediction onsets via Bayes’ theorem, which estimates a <a href="https://en.wikipedia.org/wiki/Posterior_probability">posterior probability distribution</a> using two components: priors to encode our expectations about when the onset could be, and data to inform posterior inference via a <a href="https://en.wikipedia.org/wiki/Likelihood_function">likelihood function</a><a href="#fn3" class="footnote-ref" id="fnref3"><sup>3</sup></a>.</p>
+<p>We start with the priors: we reasoned that predictiton onsets could only arise in the 1600 ms time window between the onset of the pronoun and the onset of the noun (adding 200 ms for saccade planning). We therefore specified a normal distribution centered in the middle of this critical window, with a 95% probability of the onset falling between 200 and 1800 ms: <span class="math inline">\(N(1000,400)\)</span>. Our prior distributions for the match and mismatch conditions therefore looked like this:</p>
 <p><img src="/blog/bpda_files/figure-html/unnamed-chunk-4-1.png" width="768" style="display: block; margin: auto;" /></p>
-<p>Next, we needed a likelihood function. This involved two steps: We used the bootstrap data to approximate a likelihood and a normal distribution to approximate a likelihood function (i.e. Laplace approximation). This was based on the assumption of the central limit theorem that the population distribution underlying the bootstrap data was approximately normal^[Using a normal distribution for the likelihood assumes that, with sufficient observations and bootstrap samples, the bootstrap distribution will approach a normal distribution in line with the central limit theorem. However, this is not always the case. An alternative way to define the likelihood would be to use a kernel density estimator instead: we present this approach in the appendices of <a href="https://osf.io/3uz7x/">this paper</a>.]. In other words, our likelihood function was a normal distribution with the mean and standard deviation of the bootstrap data:</p>
+<p>Next, we needed a likelihood function. This involved two steps: We used the bootstrap data to approximate a likelihood and a normal distribution to approximate a likelihood function (i.e. Laplace approximation). This was based on the assumption of the central limit theorem that the population distribution underlying the bootstrap data was approximately normal<a href="#fn4" class="footnote-ref" id="fnref4"><sup>4</sup></a>. In other words, our likelihood function was a normal distribution with the mean and standard deviation of the bootstrap data:</p>
 <p><img src="/blog/bpda_files/figure-html/unnamed-chunk-5-1.png" width="768" style="display: block; margin: auto;" /></p>
-<p>Finally, we could now derive the posterior distribution as the product of the prior and the likelihood. Because the prior and the likelihood are normal distributions, the posteriors for each condition can be derived analytically as the <a href="https://ccrma.stanford.edu/~jos/sasp/Product_Two_Gaussian_PDFs.html">product of two Gaussian probability density functions</a>, where</p>
+<p>Finally, we could now derive the posterior distribution as the product of the prior and the likelihood. Because the prior and the likelihood are normal distributions, the posteriors for each condition can be derived analytically as the <a href="https://ccrma.stanford.edu/~jos/sasp/Product_Two_Gaussian_PDFs.html">product of two Gaussian probability density functions</a>.</p>
 <ul>
-<li><code>\(N(\mu_{prior},\sigma_{prior})\)</code> is the prior,</li>
-<li><code>\(N(\mu_{lik},\sigma_{lik})\)</code> is the likelihood,</li>
-<li><code>\(\mu_{posterior}\)</code> is the mean of the posterior, and</li>
-<li><code>\(\sigma_{posterior}\)</code> is the standard deviation of <code>\(\mu_{posterior}\)</code></li>
+<li><span class="math inline">\(N(\mu_{prior},\sigma_{prior})\)</span> is the prior,</li>
+<li><span class="math inline">\(N(\mu_{lik},\sigma_{lik})\)</span> is the likelihood,</li>
+<li><span class="math inline">\(\mu_{posterior}\)</span> is the mean of the posterior, and</li>
+<li><span class="math inline">\(\sigma_{posterior}\)</span> is the standard deviation of <span class="math inline">\(\mu_{posterior}\)</span></li>
 </ul>
 <p>The posterior distribution of the onset in the match condition is therefore:</p>
-<p>$$ \begin{aligned}
-\mu_{posterior} &amp;= \frac{\mu_{prior} \sigma_{lik}^2 + \mu_{lik} \sigma_{prior}^2}{\sigma_{lik}^2 + \sigma_{prior}^2} \<br>
-&amp;= \frac{1000 \cdot 22^2 + 367 \cdot 400^2}{22^2 + 400^2} \ &amp;= 369 ms
-\end{aligned}`
-$$</p>
-<p>$$ \begin{aligned}
-\sigma_{posterior} &amp;= \sqrt\frac{\sigma_{prior}^2 \sigma_{lik}^2}{\sigma_{prior}^2 + \sigma_{lik}^2} \ &amp;= 
-\sqrt\frac{400^2 \cdot 22^2}{400^2 + 22^2} \ &amp;= 22 ms 
-\end{aligned}`
-$$</p>
+<p><span class="math display">\[ \begin{aligned}
+\mu_{posterior} &amp;= \frac{\mu_{prior} \sigma_{lik}^2 + \mu_{lik} \sigma_{prior}^2}{\sigma_{lik}^2 + \sigma_{prior}^2} \\
+&amp;= \frac{1000 \cdot 22^2 + 367 \cdot 400^2}{22^2 + 400^2} \\ &amp;= 369 ms
+\end{aligned}
+\]</span></p>
+<p><span class="math display">\[ \begin{aligned}
+\sigma_{posterior} &amp;= \sqrt\frac{\sigma_{prior}^2 \sigma_{lik}^2}{\sigma_{prior}^2 + \sigma_{lik}^2} \\ &amp;= 
+\sqrt\frac{400^2 \cdot 22^2}{400^2 + 22^2} \\ &amp;= 22 ms 
+\end{aligned}
+\]</span></p>
 <p>Via the same calculation, the posterior for the mismatch onset is 705 ms (SD = 9 ms). We can add these posteriors to our plots and see that they resemble the bootstrap data:</p>
 <p><img src="/blog/bpda_files/figure-html/unnamed-chunk-6-1.png" width="768" style="display: block; margin: auto;" /></p>
-<p>This is because our prior was relatively uninformative, and so the posteriors are informed more strongly by the bootstrap data than by the prior. If we had defined a strongly informative prior to say we were very certain that the prediction onsets would be 1000 ms, e.g. <code>\(N(1000, 10)\)</code>, then the posteriors would be pulled toward the prior (not completely, as they&rsquo;re still being informed by the data):</p>
+<p>This is because our prior was relatively uninformative, and so the posteriors are informed more strongly by the bootstrap data than by the prior. If we had defined a strongly informative prior to say we were very certain that the prediction onsets would be 1000 ms, e.g. <span class="math inline">\(N(1000, 10)\)</span>, then the posteriors would be pulled toward the prior (not completely, as they’re still being informed by the data):</p>
 <p><img src="/blog/bpda_files/figure-html/unnamed-chunk-7-1.png" width="960" style="display: block; margin: auto;" /></p>
 <p>How do the Bayesian onsets (red, uninformative priors) compare with the onsets from the original bootstrap procedure (black)? Quite well:</p>
 <p><img src="/blog/bpda_files/figure-html/unnamed-chunk-8-1.png" width="576" style="display: block; margin: auto;" /></p>
 <p>Now, how to decide whether the mismatch condition was slower? Because the match and mismatch posteriors are normal distributions, we can find the posterior of their difference as the <a href="https://mathworld.wolfram.com/NormalDifferenceDistribution.html">difference of two normal distributions</a>:</p>
-<p>$$ \begin{aligned}
-\mu_{posterior_{difference}} &amp;= \mu_{posterior_{mismatch}} - \mu_{posterior_{match}} \<br>
-&amp;= 705 - 369 \<br>
-&amp;= 336 ms
-\end{aligned}`
-$$</p>
-<p>$$ \begin{aligned}
-\sigma_{posterior_{difference}} &amp;= \sqrt(\sigma^2_{posterior_{mismatch}} + \sigma^2_{posterior_{match}}) \<br>
-&amp;= \sqrt(9^2 + 22^2) \<br>
-&amp;= 24ms
-\end{aligned}`
-$$</p>
-<p>We now have a posterior estimate that predictions in the mismatch condition were 336 ms slower than in the match condition, with a 95% credible interval of 288&ndash;384 ms. This posterior aligns quite well with the original bootstrap difference distribution, which estimated a difference of 338 ms with a 95th percentile interval of 300&ndash;380ms.</p>
-<h4 id="quantifying-evidence-with-a-bayes-factor">Quantifying evidence with a Bayes factor</h4>
-<p>\noindent How much has seeing the data changed our belief in the null hypothesis that the difference between match/mismatch conditions is zero? Since the likelihood is not normalised, we can use the Savage-Dickey method to compute a Bayes factor and quantify evidence against the null (<a href="https://www.jstor.org/stable/2239734">Dickey &amp; Lientz, 1970</a>; <a href="https://doi.org/10.1016/j.cogpsych.2009.12.001">Wagenmakers et al., 2010</a>). This method finds the ratio of prior to posterior density at some point value (e.g. zero):</p>
+<p><span class="math display">\[ \begin{aligned}
+\mu_{posterior_{difference}} &amp;= \mu_{posterior_{mismatch}} - \mu_{posterior_{match}} \\
+ &amp;= 705 - 369 \\
+ &amp;= 336 ms
+\end{aligned}
+\]</span></p>
+<p><span class="math display">\[ \begin{aligned}
+\sigma_{posterior_{difference}} &amp;= \sqrt(\sigma^2_{posterior_{mismatch}} + \sigma^2_{posterior_{match}}) \\
+ &amp;= \sqrt(9^2 + 22^2) \\
+ &amp;= 24ms
+\end{aligned}
+\]</span></p>
+<p>We now have a posterior estimate that predictions in the mismatch condition were 336 ms slower than in the match condition, with a 95% credible interval of 288–384 ms. This posterior aligns quite well with the original bootstrap difference distribution, which estimated a difference of 338 ms with a 95th percentile interval of 300–380ms.</p>
+<div id="quantifying-evidence-with-a-bayes-factor" class="section level4">
+<h4>Quantifying evidence with a Bayes factor</h4>
+<p>How much has seeing the data changed our belief in the null hypothesis that the difference between match/mismatch conditions is zero? Since the likelihood is not normalised, we can use the Savage-Dickey method to compute a Bayes factor and quantify evidence against the null (<a href="https://www.jstor.org/stable/2239734">Dickey &amp; Lientz, 1970</a>; <a href="https://doi.org/10.1016/j.cogpsych.2009.12.001">Wagenmakers et al., 2010</a>). This method finds the ratio of prior to posterior density at some point value (e.g. zero):</p>
 <p><img src="/blog/bpda_files/figure-html/unnamed-chunk-9-1.png" width="336" style="display: block; margin: auto;" /></p>
 <p>We compute the ratio via the equation below, where</p>
 <ul>
-<li><code>\(\theta\)</code> is the point at which we want to compare densities (e.g. zero),</li>
-<li><code>\(H_0\)</code> is our prior distribution,</li>
-<li><code>\(H_1\)</code> is our posterior distribution, and</li>
-<li><code>\(D\)</code> is the data:</li>
+<li><span class="math inline">\(\theta\)</span> is the point at which we want to compare densities (e.g. zero),</li>
+<li><span class="math inline">\(H_0\)</span> is our prior distribution,</li>
+<li><span class="math inline">\(H_1\)</span> is our posterior distribution,</li>
+<li>and <span class="math inline">\(D\)</span> is the data:</li>
 </ul>
-<p>$$ BF_{01} = \frac{p(D|H_1)}{p(D|H_0)}= \frac{p(\theta = 0|H_1)}{p(\theta = 0|D,H_1)} $$</p>
+<p><span class="math display">\[ BF_{01} = \frac{p(D|H_1)}{p(D|H_0)}= \frac{p(\theta = 0|H_1)}{p(\theta = 0|D,H_1)} \]</span></p>
 <p>Or in R form:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-r" data-lang="r"><span style="color:#75715e"># define the null hypothesis</span>
-null_hypothesis <span style="color:#f92672">&lt;-</span> <span style="color:#ae81ff">0</span>
+<pre class="r"><code># define the null hypothesis
+null_hypothesis &lt;- 0
 
-<span style="color:#75715e"># find the density of the prior at the null hypothesis</span>
-density_prior_null     <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">dnorm</span>(null_hypothesis, 
+# find the density of the prior at the null hypothesis
+density_prior_null     &lt;- dnorm(null_hypothesis, 
                                 difference_prior_mean, 
                                 difference_prior_sd)
 
-<span style="color:#75715e"># find the density of the posterior at the null hypothesis</span>
-density_posterior_null <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">dnorm</span>(null_hypothesis, 
+# find the density of the posterior at the null hypothesis
+density_posterior_null &lt;- dnorm(null_hypothesis, 
                                 difference_posterior_mean, 
                                 difference_posterior_sd)
 
 
-<span style="color:#75715e"># use Savage-Dickey equation to compute the Bayes factor</span>
-(BF01 <span style="color:#f92672">&lt;-</span> density_posterior_null<span style="color:#f92672">/</span>density_prior_null)
-</code></pre></div><pre><code>## [1] 1.402512e-44
-</code></pre><p>The Bayes factor can be interpreted as a ratio of evidence for one hypothesis over the other. Because our posterior density at zero is less than the prior density (in fact, the posterior density at zero is almost zero), the Bayes factor is less than 1 and thus favours the alternative hypothesis that there is a match/mismatch difference. We can see more clearly how overwhelminlgy it favours the alternative hypothesis if we flip the ratio to test the alternative vs. null hypotheses (BF10) rather than the null vs. alternative (BF01):</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-r" data-lang="r">(BF10 <span style="color:#f92672">&lt;-</span> <span style="color:#ae81ff">1</span><span style="color:#f92672">/</span>BF01)
-</code></pre></div><pre><code>## [1] 7.130063e+43
-</code></pre><h3 id="conclusions">Conclusions</h3>
-<p>\noindent Using our Bayesian divergence point analysis, we find strong evidence that prediction onsets were slower when there were two conflicting gender cues. The posterior estimate of the &ldquo;mismatch effect&rdquo; size was 336 ms, with a 95% credible interval of 288&ndash;384 ms. But our existing bootstrap procedure already led us to the same conclusion, so what was the advantage of adding Bayesian principles?</p>
+# use Savage-Dickey equation to compute the Bayes factor
+(BF01 &lt;- density_posterior_null/density_prior_null)</code></pre>
+<pre><code>## [1] 1.402512e-44</code></pre>
+<p>The Bayes factor can be interpreted as a ratio of evidence for one hypothesis over the other. Because our posterior density at zero is less than the prior density (in fact, the posterior density at zero is almost zero), the Bayes factor is less than 1 and thus favours the alternative hypothesis that there is a match/mismatch difference. We can see more clearly how overwhelminlgy it favours the alternative hypothesis if we flip the ratio to test the alternative vs. null hypotheses (BF10) rather than the null vs. alternative (BF01):</p>
+<pre class="r"><code>(BF10 &lt;- 1/BF01)</code></pre>
+<pre><code>## [1] 7.130063e+43</code></pre>
+</div>
+</div>
+<div id="conclusions" class="section level3">
+<h3>Conclusions</h3>
+<p>Using our Bayesian divergence point analysis, we find strong evidence that prediction onsets were slower when there were two conflicting gender cues. The posterior estimate of the “mismatch effect” size was 336 ms, with a 95% credible interval of 288–384 ms. But our existing bootstrap procedure already led us to the same conclusion, so what was the advantage of adding Bayesian principles?</p>
 <p>The Bayesian approach has all the advantages that Bayesian inference has over frequentist null hypothesis significance testing. These include that the posterior is a continuous probability distribution that gives us information about the probability of non-observed values in the data. The 95% credible interval can thus be interpreted as a range of possible between-condition differences in which the true size of the difference should lie with 95% probability, given the data and the analysis. This interpretation is more intuitive than the percentile confidence interval from the existing bootstrap method, which just told us were 95% of the resampled data lay. Moreover, we can now quantify evidence for our conclusions, and even for the null hypothesis. Finally, because the Bayesian method uses priors, we can use our posterior estimates as information about plausible effect sizes to inform the priors of future experiments.</p>
 <!-- ### Appendix 1 {-} -->
-<!-- \noindent Above we mentioned that the distribution of our bootstrap data is not normal, and so using a normal distribution as a likelihood may not be appropriate. Instead, we can use a density function as our likelihood, although this means it is no longer possible to obtain the posterior as the product of two Gaussians. Also, our likelihood is still not normalised. To solve these issues, here we demonstrate how to use a density likelihood and obtain the posterior via sampling.  -->
+<!--  Above we mentioned that the distribution of our bootstrap data is not normal, and so using a normal distribution as a likelihood may not be appropriate. Instead, we can use a density function as our likelihood, although this means it is no longer possible to obtain the posterior as the product of two Gaussians. Also, our likelihood is still not normalised. To solve these issues, here we demonstrate how to use a density likelihood and obtain the posterior via sampling.  -->
 <!-- First we define a likelihood for the match condition using a kernel density estimator of the original bootstrap data: -->
 <!-- ```{r, echo=TRUE} -->
 <!-- # define a range of onsets for which we would like to find onset probabilities, -->
@@ -426,6 +445,16 @@ density_posterior_null <span style="color:#f92672">&lt;-</span> <span style="col
 <!--        legend = c("bootstrap data","prior","likelihood: density","likelihood: normal","posterior: sampled"), -->
 <!--        lty = c(1,1,2,2,1), lwd = c(2,2,2,2,2)) -->
 <!-- ``` -->
+</div>
+<div class="footnotes">
+<hr />
+<ol>
+<li id="fn1"><p>There are several existing methods for answering temporal questions about visual world data, including <a href="https://doi.org/10.1037/a0031813">cluster permutation</a>, <a href="https://doi.org/10.1016/j.jml.2018.05.004">BDOTS</a>, and GAMMs. We summarise these in <a href="https://doi.org/10.1017/S1366728920000607">Stone et al., 2020</a> and outline why they weren’t able to answer our specific question about whether one onset was significantly faster than another.<a href="#fnref1" class="footnote-back">↩︎</a></p></li>
+<li id="fn2"><p>Depending on your experimental manipulation (e.g. how big or sustained you expect your experimental effect to be) and how you’ve set up your data (e.g. binned, unbinned, eye tracker sampling rate), your criterion for the number of consecutive significant tests may differ.<a href="#fnref2" class="footnote-back">↩︎</a></p></li>
+<li id="fn3"><p>Other possibilities for adding Bayesian principles to our procedure could have been to use the Bayesian Bootstrap (<a href="https://doi.org/10.1214/aos/1176345338">Rubin, 1981</a>), implemented in R in <code>bayesboot</code> <a href="http://www.sumsar.net/blog/2016/02/bayesboot-an-r-package/">(Bååth, 2018)</a>. Unfortunately, <code>bayesboot</code> didn’t suit our particular bootstrapping method, partly because it doesn’t take a multi-step function like ours (see steps 1-3 above), but also because it doesn’t take more informative priors—at least not currently. Alternatively, we could have fit e.g. GLMMs in <code>brms</code> <a href="https://github.com/paul-buerkner/brms">(Bürkner, 2018)</a> to test between fixation proportions at each timepoint (step 1). But this would only apply Bayesian inference to estimating the <em>magnitude</em> of the difference in fixations between target and competitor at each timepoint, when what we really want is to apply it to finding the temporal variability of the onset.<a href="#fnref3" class="footnote-back">↩︎</a></p></li>
+<li id="fn4"><p>Using a normal distribution for the likelihood assumes that, with sufficient observations and bootstrap samples, the bootstrap distribution will approach a normal distribution in line with the central limit theorem. However, this is not always the case. An alternative way to define the likelihood would be to use a kernel density estimator instead: we present this approach in the appendices of <a href="https://osf.io/3uz7x/">this paper</a>.<a href="#fnref4" class="footnote-back">↩︎</a></p></li>
+</ol>
+</div>
 
     </div>
     <footer>
