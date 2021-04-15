@@ -11,13 +11,13 @@ Description: ''
 DisableComments: yes
 # draft: TRUE
 header-includes:
-- <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
-- <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+- <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script> # seems to be necessary for pandoc
+#- <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script> # would be for mathjax except I used Yihui's solution in the footer partial
 - <img src="/images/snorkelling2.PNG" alt="tetapare">
 output:
   html_document:
     keep_md: yes # do this for each blog post
-#always_allow_html: true # needs to be in each blog yaml header so that any html in an md file is rendered
+always_allow_html: true # needs to be in each blog yaml header so that any html in an md file is rendered
 ---
 
 
@@ -28,10 +28,10 @@ library(tidyverse)
 library(patchwork)
 
 # base r plot settings
-op <- par(cex.main = 2, mar = c(5, 6, 4, 5) + 0.1, mgp = c(3.5, 1, 0), cex.lab = 1.2, 
-    font.lab = 2, cex.axis = 1, bty = "n", las = 1)
-
-xlims  <- c(0, 1800)
+# op <- par(cex.main = 2, mar = c(5, 6, 4, 5) + 0.1, mgp = c(3.5, 1, 0), cex.lab = 1.2, 
+#     font.lab = 2, cex.axis = 1, bty = "n", las = 1)
+# 
+# xlims  <- c(0, 1800)
 
 # VW data
 dat_exp2 <- read.table("E:/Academic/AGREE/papers/L1/data/data_experiment2.txt", header = TRUE) %>%
@@ -78,8 +78,14 @@ The visual world is a useful paradigm in psycholinguistics for tracking people's
 A full workthrough of our bootstrap procedure can be found in [Stone et al., 2020](https://doi.org/10.1017/S1366728920000607), but for a quick overview here, we use example data from an experiment on using syntactic gender to predict an upcoming noun in German. Participants heard sentences like “*Klicke auf seinen blauen…*” (click on his.~MASC~ blue.~MASC~ ...), while looking at two blue objects on a screen. Only one of the objects matched the gender marking of the pronoun and adjective. There were two experimental conditions: in the `match` condition, the target object and the object's owner matched in gender, e.g. *seinen Knopf* (his button.~MASC~). In the `mismatch` condition, the target object and the object's owner mismatched in gender, e.g. *ihren Knopf* (her button.~MASC~). 
 
 <center>
-![](images/objects.PNG){width=85% height=85%}
+![](/images/objects.PNG){width=85% height=85%}
 </center>
+
+
+<!-- ```{r, fig.align="center"} -->
+<!-- knitr::include_graphics("/images/objects.PNG") -->
+<!-- ``` -->
+
 
 Because of the gender cue on the possessive and adjective (e.g. -en suffix), we expected participants to predict the target object and look preferentially at it before they heard its name. What we really wanted to know though was whether predictive looks would be delayed in the mismatch condition where there was a conflicting gender cue, even though the conflicting cue was syntactically irrelevant (i.e. the object's owner being masculine or feminine has no bearing on what the upcoming object might be). You can already see below that the onset of when participants looked preferentially at the target appears to be later in the mismatch condition: 
 
@@ -160,7 +166,7 @@ But is this "prediction onset" in the mismatch condition *significantly* later t
 2. Decide on an alpha (usually 0.05) and find the first significant test statistic in a run of five consecutive significant test statistics ([Sheridan & Reingold, 2012](https://doi.org/10.1080/13506285.2012.693548); [Reingold & Sheridan, 2014](https://doi.org/10.3389/fpsyg.2014.01432) take a similar approach).^[Depending on your experimental manipulation (e.g. how big or sustained you expect your experimental effect to be) and how you've set up your data (e.g. binned, unbinned, eye tracker sampling rate), your criterion for the number of consecutive significant tests may differ.] This was our divergence point for each condition, which we consider the onset of evidence for predictions,
 3. Resample the data 2000 times with replacement and repeat steps 1-2 after each resample.
 
-\noindent The procedure thus has 3 distinct components: 
+ The procedure thus has 3 distinct components: 
 
 i) a set of statistical tests comparing fixations to the target vs. competitor, 
 ii) a criterion for deciding where the onset is, and 
@@ -343,7 +349,7 @@ By subtracting the match from the mismatch distribution, we obtain a distributio
 #### Limitations of the bootstrap procedure
 
 
-\noindent As mentioned earlier, the bootstrap makes some unlikely assumptions ([Bååth, 2018](http://www.sumsar.net/blog/2015/04/the-non-parametric-bootstrap-as-a-bayesian-model/)):
+ As mentioned earlier, the bootstrap makes some unlikely assumptions ([Bååth, 2018](http://www.sumsar.net/blog/2015/04/the-non-parametric-bootstrap-as-a-bayesian-model/)):
 
 - Any values not seen in the observed data are impossible
 - Each value in the observed data has an equal probability of occurring every time the experiment is run
@@ -507,7 +513,7 @@ Next, we needed a likelihood function. This involved two steps: We used the boot
 
 
 
-match_lik <- ggplot(data.frame(x = c(0, 1900), cond = "Match"), aes(x = x)) + 
+match_lik <- ggplot(data.frame(x = c(0, 1200), cond = "Match"), aes(x = x)) + 
   stat_density(data = bootstrap_samples, geom = "line",
                aes(match, colour = "bootstrap data", linetype = "bootstrap data"), 
                bw=10) +
@@ -524,6 +530,7 @@ match_lik <- ggplot(data.frame(x = c(0, 1900), cond = "Match"), aes(x = x)) +
                       guide = guide_legend(override.aes = list(lwd = c(1,1,0)))) +
   scale_linetype_manual("", breaks = c("prior", "bootstrap data", "likelihood"),
                         values = c("solid", "solid", "dashed")) +
+  scale_x_continuous(breaks = seq(0, 1200, 200), labels = seq(0, 1200, 200)) +
   labs(x = "Match onset (ms)", y = "Density") +
   theme_light() +
   theme(axis.text.y = element_blank(),
@@ -543,7 +550,7 @@ match_lik <- ggplot(data.frame(x = c(0, 1900), cond = "Match"), aes(x = x)) +
 # #        lty = c(1,1,2), lwd = c(2,2,2))
 
 
-mismatch_lik <- ggplot(data.frame(x = c(0, 1900), cond = "Mismatch"), aes(x = x)) + 
+mismatch_lik <- ggplot(data.frame(x = c(0, 1200), cond = "Mismatch"), aes(x = x)) + 
   stat_density(data = bootstrap_samples, geom = "line",
                aes(mismatch, colour = "bootstrap data", linetype = "bootstrap data"), 
                bw=10) +
@@ -560,6 +567,7 @@ mismatch_lik <- ggplot(data.frame(x = c(0, 1900), cond = "Mismatch"), aes(x = x)
                       guide = guide_legend(override.aes = list(lwd = c(1,1,0)))) +
   scale_linetype_manual("", breaks = c("prior", "bootstrap data", "likelihood"),
                         values = c("solid", "solid", "dashed")) +
+  scale_x_continuous(breaks = seq(0, 1200, 200), labels = seq(0, 1200, 200)) +
   labs(x = "Mismatch onset (ms)", y = "Density") +
   theme_light() +
   theme(axis.text.y = element_blank(),
@@ -572,7 +580,7 @@ mismatch_lik <- ggplot(data.frame(x = c(0, 1900), cond = "Mismatch"), aes(x = x)
 match_lik + mismatch_lik + plot_layout(guides = "collect")
 ```
 
-Finally, we could now derive the posterior distribution as the product of the prior and the likelihood. Because the prior and the likelihood are normal distributions, the posteriors for each condition can be derived analytically as the [product of two Gaussian probability density functions](https://ccrma.stanford.edu/~jos/sasp/Product_Two_Gaussian_PDFs.html), where
+Finally, we could now derive the posterior distribution as the product of the prior and the likelihood. Because the prior and the likelihood are normal distributions, the posteriors for each condition can be derived analytically as the [product of two Gaussian probability density functions](https://ccrma.stanford.edu/~jos/sasp/Product_Two_Gaussian_PDFs.html).
 
 - $N(\mu_{prior},\sigma_{prior})$ is the prior,
 - $N(\mu_{lik},\sigma_{lik})$ is the likelihood,
@@ -612,7 +620,7 @@ Via the same calculation, the posterior for the mismatch onset is 705 ms (SD = 9
 #        lty = c(1,1,2,1), lwd = c(2,2,2,2))
 
 
-match_post <- ggplot(data.frame(x = c(0, 1900), cond = "Match"), aes(x = x)) + 
+match_post <- ggplot(data.frame(x = c(0, 1200), cond = "Match"), aes(x = x)) + 
   stat_density(data = bootstrap_samples, geom = "line",
                aes(match, colour = "bootstrap data", linetype = "bootstrap data"), 
                bw=10) +
@@ -632,6 +640,7 @@ match_post <- ggplot(data.frame(x = c(0, 1900), cond = "Match"), aes(x = x)) +
                       guide = guide_legend(override.aes = list(lwd = c(1,1,0,1)))) +
   scale_linetype_manual("", breaks = c("prior", "bootstrap data", "likelihood", "posterior"),
                         values = c("solid", "solid", "dashed", "solid")) +
+  scale_x_continuous(breaks = seq(0, 1200, 200), labels = seq(0, 1200, 200)) +
   labs(x = "Match onset (ms)", y = "Density") +
   theme_light() +
   theme(axis.text.y = element_blank(),
@@ -652,7 +661,7 @@ match_post <- ggplot(data.frame(x = c(0, 1900), cond = "Match"), aes(x = x)) +
 # #        lty = c(1,1,2), lwd = c(2,2,2))
 
 
-mismatch_post <- ggplot(data.frame(x = c(0, 1900), cond = "Mismatch"), aes(x = x)) + 
+mismatch_post <- ggplot(data.frame(x = c(0, 1200), cond = "Mismatch"), aes(x = x)) + 
   stat_density(data = bootstrap_samples, geom = "line",
                aes(mismatch, colour = "bootstrap data", linetype = "bootstrap data"), 
                bw=10) +
@@ -672,6 +681,7 @@ mismatch_post <- ggplot(data.frame(x = c(0, 1900), cond = "Mismatch"), aes(x = x
                       guide = guide_legend(override.aes = list(lwd = c(1,1,0,1)))) +
   scale_linetype_manual("", breaks = c("prior", "bootstrap data", "likelihood", "posterior"),
                         values = c("solid", "solid", "dashed", "solid")) +
+  scale_x_continuous(breaks = seq(0, 1200, 200), labels = seq(0, 1200, 200)) +
   labs(x = "Mismatch onset (ms)", y = "Density") +
   theme_light() +
   theme(axis.text.y = element_blank(),
@@ -723,7 +733,7 @@ par(las = 0, mfrow=c(1,2))
 #        lty = c(1,1,2,1), lwd = c(2,2,2,2))
 
 
-match_prior_inf <- ggplot(data.frame(x = c(0, 1900), cond = "Match"), aes(x = x)) + 
+match_prior_inf <- ggplot(data.frame(x = c(0, 1200), cond = "Match"), aes(x = x)) + 
   stat_density(data = bootstrap_samples, geom = "line",
                aes(match, colour = "bootstrap data", linetype = "bootstrap data"), 
                bw=10) +
@@ -743,6 +753,7 @@ match_prior_inf <- ggplot(data.frame(x = c(0, 1900), cond = "Match"), aes(x = x)
                       guide = guide_legend(override.aes = list(lwd = c(1,1,0,1)))) +
   scale_linetype_manual("", breaks = c("prior", "bootstrap data", "likelihood", "posterior"),
                         values = c("solid", "solid", "dashed", "solid")) +
+  scale_x_continuous(breaks = seq(0, 1200, 200), labels = seq(0, 1200, 200)) +
   labs(x = "Match onset (ms)", y = "Density") +
   theme_light() +
   theme(axis.text.y = element_blank(),
@@ -763,7 +774,7 @@ match_prior_inf <- ggplot(data.frame(x = c(0, 1900), cond = "Match"), aes(x = x)
 # #        lty = c(1,1,2,1), lwd = c(2,2,2,2))
 
 
-mismatch_prior_inf <- ggplot(data.frame(x = c(0, 1900), cond = "Mismatch"), aes(x = x)) + 
+mismatch_prior_inf <- ggplot(data.frame(x = c(0, 1200), cond = "Mismatch"), aes(x = x)) + 
   stat_density(data = bootstrap_samples, geom = "line",
                aes(mismatch, colour = "bootstrap data", linetype = "bootstrap data"), 
                bw=10) +
@@ -783,6 +794,7 @@ mismatch_prior_inf <- ggplot(data.frame(x = c(0, 1900), cond = "Mismatch"), aes(
                       guide = guide_legend(override.aes = list(lwd = c(1,1,0,1)))) +
   scale_linetype_manual("", breaks = c("prior", "bootstrap data", "likelihood", "posterior"),
                         values = c("solid", "solid", "dashed", "solid")) +
+  scale_x_continuous(breaks = seq(0, 1200, 200), labels = seq(0, 1200, 200)) +
   labs(x = "Mismatch onset (ms)", y = "Density") +
   theme_light() +
   theme(axis.text.y = element_blank(),
@@ -916,7 +928,7 @@ We now have a posterior estimate that predictions in the mismatch condition were
 
 #### Quantifying evidence with a Bayes factor
 
-\noindent How much has seeing the data changed our belief in the null hypothesis that the difference between match/mismatch conditions is zero? Since the likelihood is not normalised, we can use the Savage-Dickey method to compute a Bayes factor and quantify evidence against the null ([Dickey & Lientz, 1970](https://www.jstor.org/stable/2239734); [Wagenmakers et al., 2010](https://doi.org/10.1016/j.cogpsych.2009.12.001)). This method finds the ratio of prior to posterior density at some point value (e.g. zero): 
+ How much has seeing the data changed our belief in the null hypothesis that the difference between match/mismatch conditions is zero? Since the likelihood is not normalised, we can use the Savage-Dickey method to compute a Bayes factor and quantify evidence against the null ([Dickey & Lientz, 1970](https://www.jstor.org/stable/2239734); [Wagenmakers et al., 2010](https://doi.org/10.1016/j.cogpsych.2009.12.001)). This method finds the ratio of prior to posterior density at some point value (e.g. zero): 
 
 
 ```{r, fig.height=3.5, fig.width=3.5, fig.align="center"}
@@ -980,12 +992,12 @@ ggplot(data.frame(x = c(-750, 750), cond = "Difference"), aes(x = x)) +
 ```
 
 
-We compute the ratio via the equation below, where
+We compute the ratio via the equation below, where 
 
-- $\theta$ is the point at which we want to compare densities (e.g. zero), 
+- $\theta$ is the point at which we want to compare densities (e.g. zero),
 - $H_0$ is our prior distribution, 
-- $H_1$ is our posterior distribution, and 
-- $D$ is the data:
+- $H_1$ is our posterior distribution, 
+- and $D$ is the data:
 
 $$ BF_{01} = \frac{p(D|H_1)}{p(D|H_0)}= \frac{p(\theta = 0|H_1)}{p(\theta = 0|D,H_1)} $$
 
@@ -1022,7 +1034,7 @@ The Bayes factor can be interpreted as a ratio of evidence for one hypothesis ov
 
 ### Conclusions
 
-\noindent Using our Bayesian divergence point analysis, we find strong evidence that prediction onsets were slower when there were two conflicting gender cues. The posterior estimate of the "mismatch effect" size was 336 ms, with a 95\% credible interval of 288--384 ms. But our existing bootstrap procedure already led us to the same conclusion, so what was the advantage of adding Bayesian principles? 
+ Using our Bayesian divergence point analysis, we find strong evidence that prediction onsets were slower when there were two conflicting gender cues. The posterior estimate of the "mismatch effect" size was 336 ms, with a 95\% credible interval of 288--384 ms. But our existing bootstrap procedure already led us to the same conclusion, so what was the advantage of adding Bayesian principles? 
 
 The Bayesian approach has all the advantages that Bayesian inference has over frequentist null hypothesis significance testing. These include that the posterior is a continuous probability distribution that gives us information about the probability of non-observed values in the data. The 95\% credible interval can thus be interpreted as a range of possible between-condition differences in which the true size of the difference should lie with 95\% probability, given the data and the analysis. This interpretation is more intuitive than the percentile confidence interval from the existing bootstrap method, which just told us were 95\% of the resampled data lay. Moreover, we can now quantify evidence for our conclusions, and even for the null hypothesis. Finally, because the Bayesian method uses priors, we can use our posterior estimates as information about plausible effect sizes to inform the priors of future experiments.
 
@@ -1030,7 +1042,7 @@ The Bayesian approach has all the advantages that Bayesian inference has over fr
 
 <!-- ### Appendix 1 {-} -->
 
-<!-- \noindent Above we mentioned that the distribution of our bootstrap data is not normal, and so using a normal distribution as a likelihood may not be appropriate. Instead, we can use a density function as our likelihood, although this means it is no longer possible to obtain the posterior as the product of two Gaussians. Also, our likelihood is still not normalised. To solve these issues, here we demonstrate how to use a density likelihood and obtain the posterior via sampling.  -->
+<!--  Above we mentioned that the distribution of our bootstrap data is not normal, and so using a normal distribution as a likelihood may not be appropriate. Instead, we can use a density function as our likelihood, although this means it is no longer possible to obtain the posterior as the product of two Gaussians. Also, our likelihood is still not normalised. To solve these issues, here we demonstrate how to use a density likelihood and obtain the posterior via sampling.  -->
 
 <!-- First we define a likelihood for the match condition using a kernel density estimator of the original bootstrap data: -->
 
