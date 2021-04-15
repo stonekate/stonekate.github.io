@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Blog on Kate Stone | University of Potsdam</title>
+    <link>/blog/</link>
+    <description>Recent content in Blog on Kate Stone | University of Potsdam</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <lastBuildDate>Thu, 08 Apr 2021 00:00:00 +0000</lastBuildDate><atom:link href="/blog/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Bayesian divergence point analysis of visual world data</title>
+      <link>/blog/bpda/</link>
+      <pubDate>Thu, 08 Apr 2021 00:00:00 +0000</pubDate>
+      
+      <guid>/blog/bpda/</guid>
+      <description>The visual world is a useful paradigm in psycholinguistics for tracking people&amp;rsquo;s eye fixations as they listen to sentences containing some kind of experimental manipulation. A common question is whether the experimental manipulation makes people look at a target object earlier in one condition than another. To answer this, we need to decide when in each condition people start looking at the target and compare these timepoints between conditions. But this is not as straightforward as it sounds!</description>
+    </item>
+    
+  </channel>
+</rss>
