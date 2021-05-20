@@ -169,7 +169,7 @@
 <p>The visual world is a useful paradigm in psycholinguistics for tracking people’s eye fixations as they listen to sentences containing some kind of experimental manipulation. A common question is whether the experimental manipulation makes people look at a target object earlier in one condition than another. To answer this, we need to decide <em>when</em> in each condition people start looking at the target and compare these timepoints between conditions. But this is not as straightforward as it sounds!<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a> We came up with a bootstrapping method to do this in <a href="https://doi.org/10.1017/S1366728920000607">Stone, Lago &amp; Schad, 2020</a>. However, bootstrapping makes some unlikely assumptions about data—I’ll come to these later—and so here we try to improve on these assumptions by adding Bayesian principles to our method. This was an approach developed with <a href="https://www.jverissimo.net/">João Veríssimo</a>, <a href="https://danielschad.github.io/">Daniel Schad</a>, and <a href="https://sollago.github.io/">Sol Lago</a>, and we apply it in <a href="https://osf.io/3uz7x/">this paper</a>.</p>
 <div id="the-bootstrap-procedure" class="section level3">
 <h3>The bootstrap procedure</h3>
-<p>A full workthrough of our bootstrap procedure can be found in <a href="https://doi.org/10.1017/S1366728920000607">Stone et al., 2020</a>, but for a quick overview here, we use example data from an experiment on using syntactic gender to predict an upcoming noun in German. Participants heard sentences like “<em>Klicke auf seinen blauen…</em>” (click on his.<sub>MASC</sub> blue.<sub>MASC</sub> …), while looking at two blue objects on a screen. Only one of the objects matched the gender marking of the pronoun and adjective. There were two experimental conditions: in the <code>match</code> condition, the target object and the object’s owner matched in gender, e.g. <em>seinen Knopf</em> (his button.<sub>MASC</sub>). In the <code>mismatch</code> condition, the target object and the object’s owner mismatched in gender, e.g. <em>ihren Knopf</em> (her button.<sub>MASC</sub>).</p>
+<p>A coded tutorial of our bootstrap procedure in Stone et al. (2020) is at <a href="https://osf.io/exbmk/">https://osf.io/exbmk/</a>, but for a quick overview, we use example data from an experiment on using syntactic gender to predict an upcoming noun in German. Participants heard sentences like “<em>Klicke auf seinen blauen…</em>” (click on his.<sub>MASC</sub> blue.<sub>MASC</sub> …), while looking at two blue objects on a screen. Only one of the objects matched the gender marking of the pronoun and adjective. There were two experimental conditions: in the <code>match</code> condition, the target object and the object’s owner matched in gender, e.g. <em>seinen Knopf</em> (his button.<sub>MASC</sub>). In the <code>mismatch</code> condition, the target object and the object’s owner mismatched in gender, e.g. <em>ihren Knopf</em> (her button.<sub>MASC</sub>).</p>
 <center>
 <img src="/images/objects.PNG" style="width:85.0%;height:85.0%" />
 </center>
@@ -210,11 +210,24 @@
 </div>
 <div id="adding-bayesian-principles" class="section level3">
 <h3>Adding Bayesian principles</h3>
-<p><a href="https://en.wikipedia.org/wiki/Bayesian_inference">Bayesian inference</a> estimates our certainty about an event based on our prior knowledge about the probability of that event and new data. In our case, the event is prediction onsets. We can estimate our certainty about prediction onsets via Bayes’ theorem, which estimates a <a href="https://en.wikipedia.org/wiki/Posterior_probability">posterior probability distribution</a> using two components: priors to encode our expectations about when the onset could be, and data to inform posterior inference via a <a href="https://en.wikipedia.org/wiki/Likelihood_function">likelihood function</a><a href="#fn3" class="footnote-ref" id="fnref3"><sup>3</sup></a>.</p>
-<p>We start with the priors: we reasoned that predictiton onsets could only arise in the 1600 ms time window between the onset of the pronoun and the onset of the noun (adding 200 ms for saccade planning). We therefore specified a normal distribution centered in the middle of this critical window, with a 95% probability of the onset falling between 200 and 1800 ms: <span class="math inline">\(N(1000,400)\)</span>. Our prior distributions for the match and mismatch conditions therefore looked like this:</p>
-<p><img src="/blog/bpda_files/figure-html/unnamed-chunk-4-1.png" width="768" style="display: block; margin: auto;" /></p>
-<p>Next, we needed a likelihood function. This involved two steps: We used the bootstrap data to approximate a likelihood and a normal distribution to approximate a likelihood function (i.e. Laplace approximation). This was based on the assumption of the central limit theorem that the population distribution underlying the bootstrap data was approximately normal<a href="#fn4" class="footnote-ref" id="fnref4"><sup>4</sup></a>. In other words, our likelihood function was a normal distribution with the mean and standard deviation of the bootstrap data:</p>
+<p>Bayesian inference estimates our certainty about an event based on our prior knowledge about the probability of that event and new data. In our case, the event is prediction onsets. We can estimate our certainty about prediction onsets via Bayes’ theorem, which estimates a <a href="https://en.wikipedia.org/wiki/Posterior_probability">posterior probability distribution</a> using two components: priors to encode our expectations about when the onset could be, and data to inform posterior inference via a <a href="https://en.wikipedia.org/wiki/Likelihood_function">likelihood function</a><a href="#fn3" class="footnote-ref" id="fnref3"><sup>3</sup></a>.</p>
+<p>We start with the priors: we reasoned that prediction onsets could only arise in the 1600 ms time window between the onset of the pronoun and the onset of the noun (adding 200 ms for saccade planning). We therefore specified a normal distribution centered in the middle of this critical window, with a 95% probability of the onset falling between 200 and 1800 ms: <span class="math inline">\(N(1000,400)\)</span>:</p>
+<pre class="r"><code>prior_mean  &lt;- 1000
+prior_sd    &lt;- 400</code></pre>
+<p>Our prior distributions for the match and mismatch conditions therefore looked like this:</p>
 <p><img src="/blog/bpda_files/figure-html/unnamed-chunk-5-1.png" width="768" style="display: block; margin: auto;" /></p>
+<p>Next, we needed a likelihood function. This involved two steps: We used the bootstrap data to approximate a likelihood and a normal distribution to approximate a likelihood function (i.e. Laplace approximation). This was based on the assumption of the central limit theorem that the population distribution underlying the bootstrap data was approximately normal<a href="#fn4" class="footnote-ref" id="fnref4"><sup>4</sup></a>. In other words, our likelihood function was a normal distribution with the mean and standard deviation of the bootstrap data:</p>
+<pre class="r"><code># match condition
+likelihood_mean_match    &lt;- mean(bootstrap_samples$match, na.rm = TRUE)
+likelihood_sd_match      &lt;- sd(bootstrap_samples$match, na.rm = TRUE)*
+                                 (length(bootstrap_samples$match)-1)/length(bootstrap_samples$match)
+
+
+# mismatch condition
+likelihood_mean_mismatch &lt;- mean(bootstrap_samples$mismatch, na.rm = TRUE)
+likelihood_sd_mismatch   &lt;- sd(bootstrap_samples$mismatch, na.rm = TRUE)*
+                                 (length(bootstrap_samples$mismatch)-1)/length(bootstrap_samples$mismatch)</code></pre>
+<p><img src="/blog/bpda_files/figure-html/unnamed-chunk-7-1.png" width="768" style="display: block; margin: auto;" /></p>
 <p>Finally, we could now derive the posterior distribution as the product of the prior and the likelihood. Because the prior and the likelihood are normal distributions, the posteriors for each condition can be derived analytically as the <a href="https://ccrma.stanford.edu/~jos/sasp/Product_Two_Gaussian_PDFs.html">product of two Gaussian probability density functions</a>.</p>
 <ul>
 <li><span class="math inline">\(N(\mu_{prior},\sigma_{prior})\)</span> is the prior,</li>
@@ -232,13 +245,24 @@
 \sigma_{posterior} &amp;= \sqrt\frac{\sigma_{prior}^2 \sigma_{lik}^2}{\sigma_{prior}^2 + \sigma_{lik}^2} \\ &amp;= 
 \sqrt\frac{400^2 \cdot 22^2}{400^2 + 22^2} \\ &amp;= 22 ms 
 \end{aligned}
-\]</span></p>
-<p>Via the same calculation, the posterior for the mismatch onset is 705 ms (SD = 9 ms). We can add these posteriors to our plots and see that they resemble the bootstrap data:</p>
-<p><img src="/blog/bpda_files/figure-html/unnamed-chunk-6-1.png" width="768" style="display: block; margin: auto;" /></p>
+\]</span>
+Via the same calculation, the posterior for the mismatch onset is 705 ms (SD = 9 ms):</p>
+<pre class="r"><code># match
+posterior_mean_match     &lt;- ((likelihood_mean_match*prior_sd^2) + (prior_mean*likelihood_sd_match^2)) /
+                                (prior_sd^2 + likelihood_sd_match^2)
+posterior_sd_match       &lt;- sqrt( (likelihood_sd_match^2 * prior_sd^2) / (likelihood_sd_match^2 + prior_sd^2) )
+
+
+# mismatch
+posterior_mean_mismatch  &lt;- ((likelihood_mean_mismatch*prior_sd^2) + (prior_mean*likelihood_sd_mismatch^2)) /
+                                (prior_sd^2 + likelihood_sd_mismatch^2)
+posterior_sd_mismatch    &lt;- sqrt( (likelihood_sd_mismatch^2 * prior_sd^2) / (likelihood_sd_mismatch^2 + prior_sd^2) )</code></pre>
+<p>We can add these posteriors to our plots and see that they resemble the bootstrap data:</p>
+<p><img src="/blog/bpda_files/figure-html/unnamed-chunk-9-1.png" width="768" style="display: block; margin: auto;" /></p>
 <p>This is because our prior was relatively uninformative, and so the posteriors are informed more strongly by the bootstrap data than by the prior. If we had defined a strongly informative prior to say we were very certain that the prediction onsets would be 1000 ms, e.g. <span class="math inline">\(N(1000, 10)\)</span>, then the posteriors would be pulled toward the prior (not completely, as they’re still being informed by the data):</p>
-<p><img src="/blog/bpda_files/figure-html/unnamed-chunk-7-1.png" width="960" style="display: block; margin: auto;" /></p>
+<p><img src="/blog/bpda_files/figure-html/unnamed-chunk-10-1.png" width="960" style="display: block; margin: auto;" /></p>
 <p>How do the Bayesian onsets (red, uninformative priors) compare with the onsets from the original bootstrap procedure (black)? Quite well:</p>
-<p><img src="/blog/bpda_files/figure-html/unnamed-chunk-8-1.png" width="576" style="display: block; margin: auto;" /></p>
+<p><img src="/blog/bpda_files/figure-html/unnamed-chunk-11-1.png" width="576" style="display: block; margin: auto;" /></p>
 <p>Now, how to decide whether the mismatch condition was slower? Because the match and mismatch posteriors are normal distributions, we can find the posterior of their difference as the <a href="https://mathworld.wolfram.com/NormalDifferenceDistribution.html">difference of two normal distributions</a>:</p>
 <p><span class="math display">\[ \begin{aligned}
 \mu_{posterior_{difference}} &amp;= \mu_{posterior_{mismatch}} - \mu_{posterior_{match}} \\
@@ -252,11 +276,13 @@
  &amp;= 24ms
 \end{aligned}
 \]</span></p>
+<pre class="r"><code>posterior_mean_difference  &lt;- posterior_mean_mismatch - posterior_mean_match
+posterior_sd_difference    &lt;- sqrt( posterior_sd_mismatch^2 + posterior_sd_match^2 )</code></pre>
 <p>We now have a posterior estimate that predictions in the mismatch condition were 336 ms slower than in the match condition, with a 95% credible interval of 288–384 ms. This posterior aligns quite well with the original bootstrap difference distribution, which estimated a difference of 338 ms with a 95th percentile interval of 300–380ms.</p>
 <div id="quantifying-evidence-with-a-bayes-factor" class="section level4">
 <h4>Quantifying evidence with a Bayes factor</h4>
 <p>How much has seeing the data changed our belief in the null hypothesis that the difference between match/mismatch conditions is zero? Since the likelihood is not normalised, we can use the Savage-Dickey method to compute a Bayes factor and quantify evidence against the null (<a href="https://www.jstor.org/stable/2239734">Dickey &amp; Lientz, 1970</a>; <a href="https://doi.org/10.1016/j.cogpsych.2009.12.001">Wagenmakers et al., 2010</a>). This method finds the ratio of prior to posterior density at some point value (e.g. zero):</p>
-<p><img src="/blog/bpda_files/figure-html/unnamed-chunk-9-1.png" width="336" style="display: block; margin: auto;" /></p>
+<p><img src="/blog/bpda_files/figure-html/unnamed-chunk-13-1.png" width="336" style="display: block; margin: auto;" /></p>
 <p>We compute the ratio via the equation below, where</p>
 <ul>
 <li><span class="math inline">\(\theta\)</span> is the point at which we want to compare densities (e.g. zero),</li>
@@ -269,15 +295,19 @@
 <pre class="r"><code># define the null hypothesis
 null_hypothesis &lt;- 0
 
+# define a prior for the distribution of differences 
+prior_mean_difference   &lt;- prior_mean - prior_mean
+prior_sd_difference     &lt;- sqrt(prior_sd^2 + prior_sd^2)
+
 # find the density of the prior at the null hypothesis
 density_prior_null     &lt;- dnorm(null_hypothesis, 
-                                difference_prior_mean, 
-                                difference_prior_sd)
+                                prior_mean_difference, 
+                                prior_sd_difference)
 
 # find the density of the posterior at the null hypothesis
 density_posterior_null &lt;- dnorm(null_hypothesis, 
-                                difference_posterior_mean, 
-                                difference_posterior_sd)
+                                posterior_mean_difference, 
+                                posterior_sd_difference)
 
 
 # use Savage-Dickey equation to compute the Bayes factor
@@ -291,7 +321,7 @@ density_posterior_null &lt;- dnorm(null_hypothesis,
 <div id="conclusions" class="section level3">
 <h3>Conclusions</h3>
 <p>Using our Bayesian divergence point analysis, we find strong evidence that prediction onsets were slower when there were two conflicting gender cues. The posterior estimate of the “mismatch effect” size was 336 ms, with a 95% credible interval of 288–384 ms. But our existing bootstrap procedure already led us to the same conclusion, so what was the advantage of adding Bayesian principles?</p>
-<p>The Bayesian approach has all the advantages that Bayesian inference has over frequentist null hypothesis significance testing. These include that the posterior is a continuous probability distribution that gives us information about the probability of non-observed values in the data. The 95% credible interval can thus be interpreted as a range of possible between-condition differences in which the true size of the difference should lie with 95% probability, given the data and the analysis. This interpretation is more intuitive than the percentile confidence interval from the existing bootstrap method, which just told us were 95% of the resampled data lay. Moreover, we can now quantify evidence for our conclusions, and even for the null hypothesis. Finally, because the Bayesian method uses priors, we can use our posterior estimates as information about plausible effect sizes to inform the priors of future experiments.</p>
+<p>The Bayesian approach has all the advantages that Bayesian inference has over frequentist null hypothesis significance testing. These include that the posterior is a continuous probability distribution that gives us information about the probability of non-observed values in the data. The 95% credible interval can thus be interpreted as a range of possible between-condition differences in which the true size of the difference should lie with 95% probability, given the data and the analysis. This interpretation is more intuitive than the percentile confidence interval from the existing bootstrap method, which just told us were 95% of the resampled data lay. Moreover, we can now quantify evidence for our conclusions, and even for the null hypothesis, using a Bayes factor. Finally, because the Bayesian method uses priors, we can use our posterior estimates as information about plausible effect sizes to inform the priors of future experiments.</p>
 <!-- ### Appendix 1 {-} -->
 <!--  Above we mentioned that the distribution of our bootstrap data is not normal, and so using a normal distribution as a likelihood may not be appropriate. Instead, we can use a density function as our likelihood, although this means it is no longer possible to obtain the posterior as the product of two Gaussians. Also, our likelihood is still not normalised. To solve these issues, here we demonstrate how to use a density likelihood and obtain the posterior via sampling.  -->
 <!-- First we define a likelihood for the match condition using a kernel density estimator of the original bootstrap data: -->

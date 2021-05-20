@@ -75,7 +75,7 @@ The visual world is a useful paradigm in psycholinguistics for tracking people's
 
 ### The bootstrap procedure
 
-A full workthrough of our bootstrap procedure can be found in [Stone et al., 2020](https://doi.org/10.1017/S1366728920000607), but for a quick overview here, we use example data from an experiment on using syntactic gender to predict an upcoming noun in German. Participants heard sentences like “*Klicke auf seinen blauen…*” (click on his.~MASC~ blue.~MASC~ ...), while looking at two blue objects on a screen. Only one of the objects matched the gender marking of the pronoun and adjective. There were two experimental conditions: in the `match` condition, the target object and the object's owner matched in gender, e.g. *seinen Knopf* (his button.~MASC~). In the `mismatch` condition, the target object and the object's owner mismatched in gender, e.g. *ihren Knopf* (her button.~MASC~). 
+A coded tutorial of our bootstrap procedure in Stone et al. (2020) is at [https://osf.io/exbmk/](https://osf.io/exbmk/), but for a quick overview, we use example data from an experiment on using syntactic gender to predict an upcoming noun in German. Participants heard sentences like “*Klicke auf seinen blauen…*” (click on his.~MASC~ blue.~MASC~ ...), while looking at two blue objects on a screen. Only one of the objects matched the gender marking of the pronoun and adjective. There were two experimental conditions: in the `match` condition, the target object and the object's owner matched in gender, e.g. *seinen Knopf* (his button.~MASC~). In the `mismatch` condition, the target object and the object's owner mismatched in gender, e.g. *ihren Knopf* (her button.~MASC~). 
 
 <center>
 ![](/images/objects.PNG){width=85% height=85%}
@@ -424,26 +424,22 @@ posterior_sd_exp2    <- sqrt( posterior_sd_mi^2 + posterior_sd_ma^2 )
 ```
 
 
-[Bayesian inference](https://en.wikipedia.org/wiki/Bayesian_inference) estimates our certainty about an event based on our prior knowledge about the probability of that event and new data. In our case, the event is prediction onsets. We can estimate our certainty about prediction onsets via Bayes' theorem, which estimates a [posterior probability distribution](https://en.wikipedia.org/wiki/Posterior_probability) using two components: priors to encode our expectations about when the onset could be, and data to inform posterior inference via a [likelihood function](https://en.wikipedia.org/wiki/Likelihood_function)^[Other possibilities for adding Bayesian principles to our procedure could have been to use the Bayesian Bootstrap ([Rubin, 1981](https://doi.org/10.1214/aos/1176345338)), implemented in R in `bayesboot` [(Bååth, 2018)](http://www.sumsar.net/blog/2016/02/bayesboot-an-r-package/). Unfortunately, `bayesboot` didn't suit our particular bootstrapping method, partly because it doesn't take a multi-step function like ours (see steps 1-3 above), but also because it doesn't take more informative priors---at least not currently. Alternatively, we could have fit e.g. GLMMs in `brms` [(Bürkner, 2018)](https://github.com/paul-buerkner/brms) to test between fixation proportions at each timepoint (step 1). But this would only apply Bayesian inference to estimating the *magnitude* of the difference in fixations between target and competitor at each timepoint, when what we really want is to apply it to finding the temporal variability of the onset.]. 
+Bayesian inference estimates our certainty about an event based on our prior knowledge about the probability of that event and new data. In our case, the event is prediction onsets. We can estimate our certainty about prediction onsets via Bayes' theorem, which estimates a [posterior probability distribution](https://en.wikipedia.org/wiki/Posterior_probability) using two components: priors to encode our expectations about when the onset could be, and data to inform posterior inference via a [likelihood function](https://en.wikipedia.org/wiki/Likelihood_function)^[Other possibilities for adding Bayesian principles to our procedure could have been to use the Bayesian Bootstrap ([Rubin, 1981](https://doi.org/10.1214/aos/1176345338)), implemented in R in `bayesboot` [(Bååth, 2018)](http://www.sumsar.net/blog/2016/02/bayesboot-an-r-package/). Unfortunately, `bayesboot` didn't suit our particular bootstrapping method, partly because it doesn't take a multi-step function like ours (see steps 1-3 above), but also because it doesn't take more informative priors---at least not currently. Alternatively, we could have fit e.g. GLMMs in `brms` [(Bürkner, 2018)](https://github.com/paul-buerkner/brms) to test between fixation proportions at each timepoint (step 1). But this would only apply Bayesian inference to estimating the *magnitude* of the difference in fixations between target and competitor at each timepoint, when what we really want is to apply it to finding the temporal variability of the onset.]. 
 
-We start with the priors: we reasoned that predictiton onsets could only arise in the 1600 ms time window between the onset of the pronoun and the onset of the noun (adding 200 ms for saccade planning). We therefore specified a normal distribution centered in the middle of this critical window, with a 95% probability of the onset falling between 200 and 1800 ms: $N(1000,400)$. Our prior distributions for the match and mismatch conditions therefore looked like this:
+We start with the priors: we reasoned that prediction onsets could only arise in the 1600 ms time window between the onset of the pronoun and the onset of the noun (adding 200 ms for saccade planning). We therefore specified a normal distribution centered in the middle of this critical window, with a 95% probability of the onset falling between 200 and 1800 ms: $N(1000,400)$:
+
+```{r, echo=TRUE, eval=FALSE}
+
+prior_mean  <- 1000
+prior_sd    <- 400
+
+```
+
+
+Our prior distributions for the match and mismatch conditions therefore looked like this:
 
 
 ```{r, fig.height=3, fig.width=8, fig.align="center"}
-
-# par(las = 0, mfrow=c(1,2))
-
-
-# match
-# plot(density(na.omit(bootstrap_samples$match), bw = 10), xlim=xlims, col = "white", yaxt='n',
-#      xlab = "Match onset (ms)", ylab = "Density",
-#      main = "", frame.plot = FALSE)
-# 
-# # plot the prior
-# lines(prior$dens ~ values, xlim=xlims, lty = 1, lwd = 2)
-# legend("topright", bty = "n", col = c("black"),
-#        legend = c("prior"),
-#        lty = c(1), lwd = c(2))
 
 match_prior <- ggplot(data.frame(x = c(0, 1900), cond = "Match"), aes(x = x)) + 
   geom_density(data = bootstrap_samples, aes(match), colour = NA, fill = NA, bw=10) +
@@ -460,30 +456,6 @@ match_prior <- ggplot(data.frame(x = c(0, 1900), cond = "Match"), aes(x = x)) +
 
 
 
-# mismatch
-# plot(density(na.omit(bootstrap_samples$mismatch), bw = 10), xlim=xlims, col = "white", yaxt='n',
-#      xlab = "Mismatch onset (ms)", ylab = "",
-#      main = "", frame.plot = FALSE)
-# 
-# # plot the prior
-# lines(prior$dens ~ values, xlim=xlims, lty = 1, lwd = 2)
-# # legend("topright", bty = "n", col = c("grey50","black"),
-# #        legend = c("prior"),
-# #        lty = c(1), lwd = c(2))
-
-
-# mismatch_prior <- ggplot(data.frame(x = c(0, 1900), cond = "Mismatch"), aes(x = x)) + 
-#   geom_density(data = bootstrap_samples, aes(mismatch, colour = "data", linetype = "data", fill = "data"), bw=10) +
-#   stat_function(geom = "area", fun = dnorm, n = 2000, 
-#                 args = list(mean = prior_mean, sd = prior_sd),
-#                 aes(colour = "prior", linetype = "prior", fill = "prior"), size = 1, alpha = .5) + 
-#   scale_linetype_manual("", breaks = c("prior", "data"), values = c("solid", "solid")) +
-#   scale_colour_manual("", breaks = c("prior", "data"), values = c("black", "white")) +
-#   scale_fill_manual("", breaks = c("prior", "data"), values = c(NA, NA)) +
-#   labs(x = "Mismatch onset (ms)", y = "Density") +
-#   theme_light() +
-#   theme(axis.text.y = element_blank(),
-#         text = element_text(size = 14))
 
 mismatch_prior <- match_prior +
   labs(x = "Mismatch onset (ms)", y = "Density")
@@ -495,22 +467,23 @@ match_prior + mismatch_prior + plot_layout(guides = "collect")
 
 Next, we needed a likelihood function. This involved two steps: We used the bootstrap data to approximate a likelihood and a normal distribution to approximate a likelihood function (i.e. Laplace approximation). This was based on the assumption of the central limit theorem that the population distribution underlying the bootstrap data was approximately normal^[Using a normal distribution for the likelihood assumes that, with sufficient observations and bootstrap samples, the bootstrap distribution will approach a normal distribution in line with the central limit theorem. However, this is not always the case. An alternative way to define the likelihood would be to use a kernel density estimator instead: we present this approach in the appendices of [this paper](https://osf.io/3uz7x/).]. In other words, our likelihood function was a normal distribution with the mean and standard deviation of the bootstrap data: 
 
+```{r, echo=TRUE, eval=FALSE}
+
+# match condition
+likelihood_mean_match    <- mean(bootstrap_samples$match, na.rm = TRUE)
+likelihood_sd_match      <- sd(bootstrap_samples$match, na.rm = TRUE)*
+                                 (length(bootstrap_samples$match)-1)/length(bootstrap_samples$match)
+
+
+# mismatch condition
+likelihood_mean_mismatch <- mean(bootstrap_samples$mismatch, na.rm = TRUE)
+likelihood_sd_mismatch   <- sd(bootstrap_samples$mismatch, na.rm = TRUE)*
+                                 (length(bootstrap_samples$mismatch)-1)/length(bootstrap_samples$mismatch)
+
+```
+
 
 ```{r, fig.height=3, fig.width=8, fig.align="center"}
-
-# par(las = 0, mfrow=c(1,2))
-
-
-# # add the likelihood to the plot
-# plot(density(na.omit(bootstrap_samples$match), bw=10), xlim=xlims, col = "grey50", yaxt='n',
-#      xlab = "Match onset (ms)", 
-#      main = "", frame.plot = FALSE)
-# lines(prior$dens ~ values, xlim=xlims, lty = 1, lwd = 2)
-# lines(likelihood_ma$dens ~ values, lty = 2, xlim=xlims, lwd = 2)
-# legend("topright", bty = "n", col = c("grey50","black","black"), 
-#        legend = c("bootstrap data","prior","likelihood"),
-#        lty = c(1,1,2), lwd = c(2,2,2))
-
 
 
 match_lik <- ggplot(data.frame(x = c(0, 1200), cond = "Match"), aes(x = x)) + 
@@ -539,15 +512,6 @@ match_lik <- ggplot(data.frame(x = c(0, 1200), cond = "Match"), aes(x = x)) +
   guides(colour = guide_legend(override.aes = list(size = 1)))
 
 
-# # add the likelihood to the plot
-# plot(density(na.omit(bootstrap_samples$mismatch), bw=10), xlim=xlims, col = "grey50", yaxt='n',
-#      xlab = "Mismatch onset (ms)", ylab = "",
-#      main = "", frame.plot = FALSE)
-# lines(prior$dens ~ values, xlim=xlims, lty = 1, lwd = 2)
-# lines(likelihood_mi$dens ~ values, lty = 2, xlim=xlims, lwd = 2)
-# # legend("topleft", bty = "n", col = c("grey50","black","black"), 
-# #        legend = c("bootstrap data","prior","likelihood"),
-# #        lty = c(1,1,2), lwd = c(2,2,2))
 
 
 mismatch_lik <- ggplot(data.frame(x = c(0, 1200), cond = "Mismatch"), aes(x = x)) + 
@@ -600,25 +564,25 @@ $$ \begin{aligned}
 \sqrt\frac{400^2 \cdot 22^2}{400^2 + 22^2} \\ &= 22 ms 
 \end{aligned}
 $$
+Via the same calculation, the posterior for the mismatch onset is 705 ms (SD = 9 ms): 
 
-Via the same calculation, the posterior for the mismatch onset is 705 ms (SD = 9 ms). We can add these posteriors to our plots and see that they resemble the bootstrap data:
+```{r, echo=TRUE, eval=FALSE}
+# match
+posterior_mean_match     <- ((likelihood_mean_match*prior_sd^2) + (prior_mean*likelihood_sd_match^2)) /
+                                (prior_sd^2 + likelihood_sd_match^2)
+posterior_sd_match       <- sqrt( (likelihood_sd_match^2 * prior_sd^2) / (likelihood_sd_match^2 + prior_sd^2) )
+
+
+# mismatch
+posterior_mean_mismatch  <- ((likelihood_mean_mismatch*prior_sd^2) + (prior_mean*likelihood_sd_mismatch^2)) /
+                                (prior_sd^2 + likelihood_sd_mismatch^2)
+posterior_sd_mismatch    <- sqrt( (likelihood_sd_mismatch^2 * prior_sd^2) / (likelihood_sd_mismatch^2 + prior_sd^2) )
+```
+
+
+We can add these posteriors to our plots and see that they resemble the bootstrap data:
 
 ```{r, fig.height=3, fig.width=8, fig.align="center"}
-
-# par(las = 0, mfrow=c(1,2))
-
-
-# add the posterior to the plot
-# plot(density(na.omit(bootstrap_samples$match), bw=10), xlim=xlims, col = "grey50", yaxt='n',
-#      xlab = "Match onset (ms)", 
-#      main = "", frame.plot = FALSE)
-# lines(prior$dens ~ values, xlim=xlims, lty = 1, lwd = 2)
-# lines(likelihood_ma$dens ~ values, lty = 2, xlim=xlims, lwd = 2)
-# lines(dnorm(0:1900, posterior_mean_ma, posterior_sd_ma), xlim=xlims, col = "red2", lwd = 2, lty=1)
-# legend("topright", bty = "n", col = c("grey50","black","black","red2"), 
-#        legend = c("bootstrap data","prior","likelihood","posterior"),
-#        lty = c(1,1,2,1), lwd = c(2,2,2,2))
-
 
 match_post <- ggplot(data.frame(x = c(0, 1200), cond = "Match"), aes(x = x)) + 
   stat_density(data = bootstrap_samples, geom = "line",
@@ -648,17 +612,6 @@ match_post <- ggplot(data.frame(x = c(0, 1200), cond = "Match"), aes(x = x)) +
         legend.key.width = unit(1,"cm")) +
   guides(colour = guide_legend(override.aes = list(size = 1)))
 
-
-# add the posterior to the plot
-# plot(density(na.omit(bootstrap_samples$mismatch), bw=10), xlim=xlims, col = "grey50", yaxt='n',
-#      xlab = "Mismatch onset (ms)", ylab = "",
-#      main = "", frame.plot = FALSE)
-# lines(prior$dens ~ values, xlim=xlims, lty = 1, lwd = 2)
-# lines(likelihood_mi$dens ~ values, lty = 2, xlim=xlims, lwd = 2)
-# lines(dnorm(0:1900, posterior_mean_mi, posterior_sd_mi), xlim=xlims, col = "red2", lwd = 2, lty=1)
-# # legend("topleft", bty = "n", col = c("grey50","black","black"), 
-# #        legend = c("bootstrap data","prior","likelihood"),
-# #        lty = c(1,1,2), lwd = c(2,2,2))
 
 
 mismatch_post <- ggplot(data.frame(x = c(0, 1200), cond = "Mismatch"), aes(x = x)) + 
@@ -922,13 +875,21 @@ $$ \begin{aligned}
 \end{aligned}
 $$
 
+```{r, echo=TRUE, eval=FALSE}
+
+posterior_mean_difference  <- posterior_mean_mismatch - posterior_mean_match
+posterior_sd_difference    <- sqrt( posterior_sd_mismatch^2 + posterior_sd_match^2 )
+
+```
+
+
 We now have a posterior estimate that predictions in the mismatch condition were 336 ms slower than in the match condition, with a 95\% credible interval of 288--384 ms. This posterior aligns quite well with the original bootstrap difference distribution, which estimated a difference of 338 ms with a 95th percentile interval of 300--380ms.
 
 
 
 #### Quantifying evidence with a Bayes factor
 
- How much has seeing the data changed our belief in the null hypothesis that the difference between match/mismatch conditions is zero? Since the likelihood is not normalised, we can use the Savage-Dickey method to compute a Bayes factor and quantify evidence against the null ([Dickey & Lientz, 1970](https://www.jstor.org/stable/2239734); [Wagenmakers et al., 2010](https://doi.org/10.1016/j.cogpsych.2009.12.001)). This method finds the ratio of prior to posterior density at some point value (e.g. zero): 
+How much has seeing the data changed our belief in the null hypothesis that the difference between match/mismatch conditions is zero? Since the likelihood is not normalised, we can use the Savage-Dickey method to compute a Bayes factor and quantify evidence against the null ([Dickey & Lientz, 1970](https://www.jstor.org/stable/2239734); [Wagenmakers et al., 2010](https://doi.org/10.1016/j.cogpsych.2009.12.001)). This method finds the ratio of prior to posterior density at some point value (e.g. zero): 
 
 
 ```{r, fig.height=3.5, fig.width=3.5, fig.align="center"}
@@ -949,25 +910,11 @@ pointhyp.dens.prior     <- dnorm(pointhyp, prior_mean_diff, prior_sd_diff)
 pointhyp.dens.posterior <- dnorm(pointhyp, posterior_mean_exp2, posterior_sd_exp2)
 
 ## tidy up these names for printing below
-difference_prior_mean     <- prior_mean_diff
-difference_prior_sd       <- prior_sd_diff
-difference_posterior_mean <- posterior_mean_exp2
-difference_posterior_sd   <- posterior_sd_exp2
+prior_mean_difference     <- prior_mean_diff
+prior_sd_difference       <- prior_sd_diff
+posterior_mean_difference <- posterior_mean_exp2
+posterior_sd_difference   <- posterior_sd_exp2
 
-# plot the ratio
-# par(las = 0, mfrow=c(1,1))
-# 
-# plot(density(na.omit(bootstrap_samples$dp)), xlim=c(-1000, 1000), col = "white", yaxt='n',
-#      xlab = "Match-mismatch onset difference (ms)", 
-#      main = "", frame.plot = FALSE)
-# # lines(c(0, 0), c(0, .008), lwd = 2, col = "grey")
-# lines(dnorm(0:1500, posterior_mean_exp2, posterior_sd_exp2), xlim=c(-500, 1500), col = "red2", lwd = 2, lty=1)
-# lines(prior_diff$dens ~ values_diff, xlim=c(-500, 1500), lty = 1, lwd = 2)
-# points(0, pointhyp.dens.prior, cex = 2, pch = 21, bg = "grey")
-# points(0, pointhyp.dens.posterior, cex = 2, pch = 21, bg = "pink", col = "red2")
-# legend("topleft", bty = "n", 
-#        legend = c("prior density\nat zero","\nposterior density\nat zero"),
-#        pch = c(21,21), pt.bg = c("grey","pink"), pt.cex = c(2,2), col = c("black","red2"))
 
 
 ggplot(data.frame(x = c(-750, 750), cond = "Difference"), aes(x = x)) + 
@@ -976,7 +923,7 @@ ggplot(data.frame(x = c(-750, 750), cond = "Difference"), aes(x = x)) +
                 colour = "black", fill = NA, alpha = .5) + 
   geom_point(aes(0, pointhyp.dens.prior), shape = 21, size = 5, colour = "black", fill = "grey", stroke = 1.5) +
   stat_function(geom = "area", fun = dnorm, n = 2000, 
-                args = list(mean = difference_posterior_mean, sd = difference_posterior_sd),
+                args = list(mean = posterior_mean_difference, sd = posterior_sd_difference),
                 colour = "red2", fill = "red2", alpha = .3) +  
   geom_point(aes(0, pointhyp.dens.posterior), shape = 21, size = 5, colour = "red2", fill = "pink", stroke = 1.5) +
   geom_vline(xintercept = 0, linetype = "dashed", colour = "grey50") +
@@ -1007,15 +954,19 @@ Or in R form:
 # define the null hypothesis
 null_hypothesis <- 0
 
+# define a prior for the distribution of differences 
+prior_mean_difference   <- prior_mean - prior_mean
+prior_sd_difference     <- sqrt(prior_sd^2 + prior_sd^2)
+
 # find the density of the prior at the null hypothesis
 density_prior_null     <- dnorm(null_hypothesis, 
-                                difference_prior_mean, 
-                                difference_prior_sd)
+                                prior_mean_difference, 
+                                prior_sd_difference)
 
 # find the density of the posterior at the null hypothesis
 density_posterior_null <- dnorm(null_hypothesis, 
-                                difference_posterior_mean, 
-                                difference_posterior_sd)
+                                posterior_mean_difference, 
+                                posterior_sd_difference)
 
 
 # use Savage-Dickey equation to compute the Bayes factor
@@ -1034,9 +985,9 @@ The Bayes factor can be interpreted as a ratio of evidence for one hypothesis ov
 
 ### Conclusions
 
- Using our Bayesian divergence point analysis, we find strong evidence that prediction onsets were slower when there were two conflicting gender cues. The posterior estimate of the "mismatch effect" size was 336 ms, with a 95\% credible interval of 288--384 ms. But our existing bootstrap procedure already led us to the same conclusion, so what was the advantage of adding Bayesian principles? 
+Using our Bayesian divergence point analysis, we find strong evidence that prediction onsets were slower when there were two conflicting gender cues. The posterior estimate of the "mismatch effect" size was 336 ms, with a 95\% credible interval of 288--384 ms. But our existing bootstrap procedure already led us to the same conclusion, so what was the advantage of adding Bayesian principles? 
 
-The Bayesian approach has all the advantages that Bayesian inference has over frequentist null hypothesis significance testing. These include that the posterior is a continuous probability distribution that gives us information about the probability of non-observed values in the data. The 95\% credible interval can thus be interpreted as a range of possible between-condition differences in which the true size of the difference should lie with 95\% probability, given the data and the analysis. This interpretation is more intuitive than the percentile confidence interval from the existing bootstrap method, which just told us were 95\% of the resampled data lay. Moreover, we can now quantify evidence for our conclusions, and even for the null hypothesis. Finally, because the Bayesian method uses priors, we can use our posterior estimates as information about plausible effect sizes to inform the priors of future experiments.
+The Bayesian approach has all the advantages that Bayesian inference has over frequentist null hypothesis significance testing. These include that the posterior is a continuous probability distribution that gives us information about the probability of non-observed values in the data. The 95\% credible interval can thus be interpreted as a range of possible between-condition differences in which the true size of the difference should lie with 95\% probability, given the data and the analysis. This interpretation is more intuitive than the percentile confidence interval from the existing bootstrap method, which just told us were 95\% of the resampled data lay. Moreover, we can now quantify evidence for our conclusions, and even for the null hypothesis, using a Bayes factor. Finally, because the Bayesian method uses priors, we can use our posterior estimates as information about plausible effect sizes to inform the priors of future experiments.
 
 
 
