@@ -75,7 +75,7 @@ The visual world is a useful paradigm in psycholinguistics for tracking people's
 
 ### The bootstrap procedure
 
-A coded tutorial of our bootstrap procedure in Stone et al. (2020) is at [https://osf.io/exbmk/](https://osf.io/exbmk/), but for a quick overview, we use example data from an experiment on using syntactic gender to predict an upcoming noun in German. Participants heard sentences like “*Klicke auf seinen blauen…*” (click on his.~MASC~ blue.~MASC~ ...), while looking at two blue objects on a screen. Only one of the objects matched the gender marking of the pronoun and adjective. There were two experimental conditions: in the `match` condition, the target object and the object's owner matched in gender, e.g. *seinen Knopf* (his button.~MASC~). In the `mismatch` condition, the target object and the object's owner mismatched in gender, e.g. *ihren Knopf* (her button.~MASC~). 
+A fully coded tutorial of the bootstrap procedure in Stone et al. (2020) is at [https://osf.io/exbmk/](https://osf.io/exbmk/). For a quick overview here, we use example data from an experiment on using syntactic gender to predict an upcoming noun in German. Participants heard sentences like “*Klicke auf seinen blauen…*” (click on his.~MASC~ blue.~MASC~ ...), while looking at two blue objects on a screen. Only one of the objects matched the gender marking of the pronoun and adjective. There were two experimental conditions: in the `match` condition, the target object and the object's owner matched in gender, e.g. *seinen Knopf* (his button.~MASC~). In the `mismatch` condition, the target object and the object's owner mismatched in gender, e.g. *ihren Knopf* (her button.~MASC~). 
 
 <center>
 ![](/images/objects.PNG){width=85% height=85%}
