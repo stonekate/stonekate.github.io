@@ -120,7 +120,7 @@ Next, from the set of objects on the left, drag and drop a `sketchpad` ![](/imag
 To write on the sketchpad, in the main pane, click on the text icon and then click in the middle of the sketchpad:
 
 <center>
-![](/images/sketchpad_edit1.PNG){width=100% height=100%}
+![](/images/sketchpad_edit1.PNG){width=80% height=80%}
 </center>
 
 Type in your instructions and click OK. Above the grid, you can change the appearance of the instructions and decide how long to present the instructions for. Since we would like participants to proceed to the next screen only when they are ready, we will leave the default *keypress* in the `Duration` field instead of setting a fixed time.
@@ -152,7 +152,7 @@ At the start of each sentence, we want to make sure any responses from the parti
 Next, we want to present a fixation cross to focus participants' eyes before the first word is presented. We use a sketchpad again (rename it *fixation_cross*), but this time use the `fixdot` element to make a dot in the middle of the sketchpad. Change the `Duration` from *keypress* to whatever we need (I've used 495 ms). Note that OpenSesame recommends to use durations that are 5 ms *less* than what you actually want to account for screen refresh rate:
 
 <center>
-![](/images/fixation_cross.PNG){width=50% height=50%}
+![](/images/fixation_cross.PNG){width=60% height=60%}
 </center>
 
 Next, we want to send a trigger to the recording software to indicate when participants saw the fixation cross. To do this, add an inline script ![](/images/python_icon.PNG). Call it *fixation_trigger*. To send a trigger, we add the following code to the Run phase:
@@ -179,7 +179,7 @@ var.trigger_interval = 45
 Next, we add a jitter screen ![](/images/jitter_icon.PNG) (call it *jitter*). This just presents a blank screen for a different, randomly selected duration before each sentence so that participants don't get entrained to the rhythm of the experiment. I set `Duration` to 1000 ms with a jitter of 100 ms and jitter mode of standard deviation:
 
 <center>
-![](/images/jitter_settings.PNG){width=50% height=50%}
+![](/images/jitter_settings.PNG){width=40% height=40%}
 </center>
 
 Then, we add another inline script called *trigger_jitter* item to send another trigger:
@@ -208,7 +208,7 @@ sendPP(0)
 After some sentences we ask participants a question. To present the question, we insert a sketchpad. Add some text to the sketchpad as before, here is an example:
 
 <center>
-![](/images/sketchpad_question.PNG){width=50% height=50%}
+![](/images/sketchpad_question.PNG){width=60% height=60%}
 </center>
 
 OpenSesame knows that whatever is written between the square brackets (here: [question]) is a variable that exists in our experimental stimuli. I'll go into detail about adding stimuli in Step 4, but in general, you would have a table that has columns such as *item*, *condition*, *sentence*, *question*, *correct_response*. OpenSesame will automatically pull out the contents of the column *question* that corresponds to the current sentence. Everything on the sketchpad that is not between square brackets will stay the same on every trial, e.g. here I have a prompt to remind participants which keyboard key corresponds Yes/No. Set the `Duration` of this sketchpad to zero: the response object coming up will take care of the sketchpad presentation duration.
@@ -226,7 +226,7 @@ sendPP(0)
 Now we need to enable participants to answer the question by inserting a keyboard response object ![](/images/response_icon.PNG) (there are also mouse and joystick objects if that's what your lab uses). In the response object, we can leave `Correct response` blank to use the *correct_response* from our stimuli table (remember to make sure this is what your correct response column is called!). Fill in the allowed responses and whether you want a timeout; my settings are here:
 
 <center>
-![](/images/response_settings.PNG){width=50% height=50%}
+![](/images/response_settings.PNG){width=70% height=70%}
 </center>
 
 
@@ -245,7 +245,7 @@ Next, we need to log the response using a logger item ![](/images/logger_icon.PN
 Next, we insert a sketchpad item to offer participants a break. You can set the `Duration` to a specific time to force participants to take a break of a particular length, or you can let them decide by setting it to *keypress*: 
 
 <center>
-![](/images/break.PNG){width=50% height=50%}
+![](/images/break.PNG){width=60% height=60%}
 </center>
 
 Then of course we add a trigger called *trigger_break* to indicate the break:
@@ -286,7 +286,7 @@ So where do the sentences come from? Click on *practice_loop* in your experiment
 or you can write them directly into table provided:
 
 <center>
-![](/images/stimuli_from_table.PNG){width=70% height=70%}
+![](/images/stimuli_from_table.PNG){width=60% height=60%}
 </center>
 
 
@@ -297,7 +297,7 @@ Make sure that the column names of your experimental table or file correspond ex
 For this tutorial, we'll use the table. To match up with the code for RSVP that we're going to write below, your table should have the same columns as this:
 
 <center>
-![](/images/stimuli.PNG){width=80% height=80%}
+![](/images/stimuli.PNG){width=90% height=90%}
 </center>
 
 For now, add some dummy sentences to test our paradigm with.

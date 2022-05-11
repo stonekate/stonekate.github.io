@@ -229,7 +229,7 @@ else:
 <p>Next, from the set of objects on the left, drag and drop a <code>sketchpad</code> <img src="/images/sketchpad_icon.PNG" /> into your experiment sequence. The sketchpad should appear at the same level as <em>settings</em>. Right click on the sketchpad and rename it <em>instructions</em>. I have two pages of instructions in my example above, but you can have as many or as few as you need.</p>
 <p>To write on the sketchpad, in the main pane, click on the text icon and then click in the middle of the sketchpad:</p>
 <center>
-<img src="/images/sketchpad_edit1.PNG" style="width:100.0%;height:100.0%" />
+<img src="/images/sketchpad_edit1.PNG" style="width:80.0%;height:80.0%" />
 </center>
 <p>Type in your instructions and click OK. Above the grid, you can change the appearance of the instructions and decide how long to present the instructions for. Since we would like participants to proceed to the next screen only when they are ready, we will leave the default <em>keypress</em> in the <code>Duration</code> field instead of setting a fixed time.</p>
 </div>
@@ -248,7 +248,7 @@ else:
 <p>At the start of each sentence, we want to make sure any responses from the participant from previous trials are reset to their default states (e.g. previous answers are cleared). To do this, we drag and drop a <code>reset_feedback</code> item <img src="/images/reset_icon.PNG" /> into <em>practice_trial</em> (not after).</p>
 <p>Next, we want to present a fixation cross to focus participants’ eyes before the first word is presented. We use a sketchpad again (rename it <em>fixation_cross</em>), but this time use the <code>fixdot</code> element to make a dot in the middle of the sketchpad. Change the <code>Duration</code> from <em>keypress</em> to whatever we need (I’ve used 495 ms). Note that OpenSesame recommends to use durations that are 5 ms <em>less</em> than what you actually want to account for screen refresh rate:</p>
 <center>
-<img src="/images/fixation_cross.PNG" style="width:50.0%;height:50.0%" />
+<img src="/images/fixation_cross.PNG" style="width:60.0%;height:60.0%" />
 </center>
 <p>Next, we want to send a trigger to the recording software to indicate when participants saw the fixation cross. To do this, add an inline script <img src="/images/python_icon.PNG" />. Call it <em>fixation_trigger</em>. To send a trigger, we add the following code to the Run phase:</p>
 <pre class="r"><code>sendPP(194)
@@ -260,7 +260,7 @@ sendPP(0)</code></pre>
 var.trigger_interval = 45</code></pre>
 <p>Next, we add a jitter screen <img src="/images/jitter_icon.PNG" /> (call it <em>jitter</em>). This just presents a blank screen for a different, randomly selected duration before each sentence so that participants don’t get entrained to the rhythm of the experiment. I set <code>Duration</code> to 1000 ms with a jitter of 100 ms and jitter mode of standard deviation:</p>
 <center>
-<img src="/images/jitter_settings.PNG" style="width:50.0%;height:50.0%" />
+<img src="/images/jitter_settings.PNG" style="width:40.0%;height:40.0%" />
 </center>
 <p>Then, we add another inline script called <em>trigger_jitter</em> item to send another trigger:</p>
 <pre class="r"><code>sendPP(195)
@@ -273,7 +273,7 @@ clock.sleep(var.trigger_interval)
 sendPP(0)</code></pre>
 <p>After some sentences we ask participants a question. To present the question, we insert a sketchpad. Add some text to the sketchpad as before, here is an example:</p>
 <center>
-<img src="/images/sketchpad_question.PNG" style="width:50.0%;height:50.0%" />
+<img src="/images/sketchpad_question.PNG" style="width:60.0%;height:60.0%" />
 </center>
 <p>OpenSesame knows that whatever is written between the square brackets (here: [question]) is a variable that exists in our experimental stimuli. I’ll go into detail about adding stimuli in Step 4, but in general, you would have a table that has columns such as <em>item</em>, <em>condition</em>, <em>sentence</em>, <em>question</em>, <em>correct_response</em>. OpenSesame will automatically pull out the contents of the column <em>question</em> that corresponds to the current sentence. Everything on the sketchpad that is not between square brackets will stay the same on every trial, e.g. here I have a prompt to remind participants which keyboard key corresponds Yes/No. Set the <code>Duration</code> of this sketchpad to zero: the response object coming up will take care of the sketchpad presentation duration.</p>
 <p>Next we add a trigger called <em>trigger_question</em> to indicate when the question was asked:</p>
@@ -282,7 +282,7 @@ clock.sleep(var.trigger_interval)
 sendPP(0)</code></pre>
 <p>Now we need to enable participants to answer the question by inserting a keyboard response object <img src="/images/response_icon.PNG" /> (there are also mouse and joystick objects if that’s what your lab uses). In the response object, we can leave <code>Correct response</code> blank to use the <em>correct_response</em> from our stimuli table (remember to make sure this is what your correct response column is called!). Fill in the allowed responses and whether you want a timeout; my settings are here:</p>
 <center>
-<img src="/images/response_settings.PNG" style="width:50.0%;height:50.0%" />
+<img src="/images/response_settings.PNG" style="width:70.0%;height:70.0%" />
 </center>
 <p>Add another trigger called <em>trigger_response</em> to signal the response:</p>
 <pre class="r"><code>sendPP(197)
@@ -291,7 +291,7 @@ sendPP(0)</code></pre>
 <p>Next, we need to log the response using a logger item <img src="/images/logger_icon.PNG" />. OpenSesame recommends logging all variables; this will include all the columns in your stimuli table, plus a lot of other background things that OpenSesame tracks like timestamps for every step in your trial/loop. These will be saved in a .csv file as the experiment progresses.</p>
 <p>Next, we insert a sketchpad item to offer participants a break. You can set the <code>Duration</code> to a specific time to force participants to take a break of a particular length, or you can let them decide by setting it to <em>keypress</em>:</p>
 <center>
-<img src="/images/break.PNG" style="width:50.0%;height:50.0%" />
+<img src="/images/break.PNG" style="width:60.0%;height:60.0%" />
 </center>
 <p>Then of course we add a trigger called <em>trigger_break</em> to indicate the break:</p>
 <pre class="r"><code>sendPP(198)
@@ -314,13 +314,13 @@ sendPP(0)</code></pre>
 </center>
 <p>or you can write them directly into table provided:</p>
 <center>
-<img src="/images/stimuli_from_table.PNG" style="width:70.0%;height:70.0%" />
+<img src="/images/stimuli_from_table.PNG" style="width:60.0%;height:60.0%" />
 </center>
 <p>Writing them in the table can be a good idea if you’re using non-Roman characters. For example, I’ve had trouble getting OpenSesame to display German words from external files and it took a lot of vague Python error messages to discover that umlauts were the problem (tip: setting UTF-8 encoding via Microsoft Excel or Notepad++ doesn’t work, but UTF-8 encoding from R does! ¯_(ツ)_/¯ ).</p>
 <p>Make sure that the column names of your experimental table or file correspond exactly to the names of these variables that you call elsewhere in the experiment, e.g. on the question sketchpad or in Python inline scripts.</p>
 <p>For this tutorial, we’ll use the table. To match up with the code for RSVP that we’re going to write below, your table should have the same columns as this:</p>
 <center>
-<img src="/images/stimuli.PNG" style="width:80.0%;height:80.0%" />
+<img src="/images/stimuli.PNG" style="width:90.0%;height:90.0%" />
 </center>
 <p>For now, add some dummy sentences to test our paradigm with.</p>
 </div>
