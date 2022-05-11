@@ -22,7 +22,7 @@ always_allow_html: true # needs to be in each blog yaml header so that any html 
 
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE, cache = FALSE, eval = TRUE)
+knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE, cache = TRUE, eval = TRUE)
 
 library(tidyverse)
 library(patchwork)

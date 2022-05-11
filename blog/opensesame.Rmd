@@ -13,7 +13,7 @@ date: '2022-03-11'
 #header-includes:
 #- <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script> # seems to be necessary for pandoc
 #- <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script> # would be for mathjax except I used Yihui's solution in the footer partial
-#- <img src="/images/snorkelling2.PNG" alt="tetapare">
+#- <img src="//images/snorkelling2.PNG" alt="tetapare">
 #output:
 #  html_document:
 #    keep_md: yes # do this for each blog post
@@ -34,10 +34,10 @@ You will need to have OpenSesame installed: [https://osdoc.cogsci.nl](https://os
 
 ### Experiment structure in OpenSesame
 
-An OpenSesame experiment contains `sequences` ![](images/sequence_icon.PNG), which determine the order that different parts of the experiment are shown. Within a sequence, we have `loops` ![](images/loop_icon.PNG), which show individual trials in a loop until some stopping point is reached. For our experiment, an individual trial is one sentence. The stopping point will be when all sentences have been shown. Here I've made a `practice loop` and an `experimental loop`. Some other useful objects are `sketchpads` ![](images/sketchpad_icon.PNG) which we can use to display participant instructions and an object where we can write our own Python code ![](images/python_icon.PNG): 
+An OpenSesame experiment contains `sequences` ![](/images/sequence_icon.PNG), which determine the order that different parts of the experiment are shown. Within a sequence, we have `loops` ![](/images/loop_icon.PNG), which show individual trials in a loop until some stopping point is reached. For our experiment, an individual trial is one sentence. The stopping point will be when all sentences have been shown. Here I've made a `practice loop` and an `experimental loop`. Some other useful objects are `sketchpads` ![](/images/sketchpad_icon.PNG) which we can use to display participant instructions and an object where we can write our own Python code ![](/images/python_icon.PNG): 
 
 <center>
-![](images/tree_structure.PNG){width=50% height=50%}
+![](/images/tree_structure.PNG){width=50% height=50%}
 </center>
 
 
@@ -49,10 +49,10 @@ An OpenSesame experiment contains `sequences` ![](images/sequence_icon.PNG), whi
 In the steps below, we're going to re-create the experiment structure above. Open a new OpenSesame experiment and click on *New experiment* in the Overview pane. This will open a tab in the main area called *General properties*. In *General properties*, I use `xpyriment` for the `Back-end`. On computers with limited graphics capabilities, you might have to choose `legacy`. This can be changed any time without breaking the experiment. The screen resolution should be that of your lab presentation PC. You can adjust the default font size/colour etc. to suit your lab.
 
 <center>
-![](images/general_tab.PNG){width=75% height=75%}
+![](/images/general_tab.PNG){width=75% height=75%}
 </center>
 
-Next, right-click on the `sequence` ![](images/sequence_icon.PNG) called `experiment` in the experiment overview and give your experiment a name. Delete the two objects that are currently sitting under `experiment`.
+Next, right-click on the `sequence` ![](/images/sequence_icon.PNG) called `experiment` in the experiment overview and give your experiment a name. Delete the two objects that are currently sitting under `experiment`.
 
 **Very important:** Save your experiment, and keep saving it throughout.
 
@@ -61,7 +61,7 @@ Next, right-click on the `sequence` ![](images/sequence_icon.PNG) called `experi
 
 In later steps, we're going to send triggers via the parallel port. Read more about parallel ports in OpenSesame [here](https://osdoc.cogsci.nl/3.2/manual/devices/parallel/). But if you're using a computer that doesn't have a parallel port (i.e. pretty much any computer that's not in your EEG lab), OpenSesame will throw an error if you try to send a trigger. We want to be able to test our paradigm without the port, so we can create a test mode where triggers are simply printed in OpenSesame's code console rather than sent to the port.
 
-From the set of objects on the left, drag and drop an `inline_script` item ![](images/python_icon.PNG) onto the *experiment* sequence. It should appear one level below the sequence, as in the screenshot above. Right click on the inline script item and rename it *settings*. Here we will put some general settings and functions we need for the experiment, starting with our test mode. 
+From the set of objects on the left, drag and drop an `inline_script` item ![](/images/python_icon.PNG) onto the *experiment* sequence. It should appear one level below the sequence, as in the screenshot above. Right click on the inline script item and rename it *settings*. Here we will put some general settings and functions we need for the experiment, starting with our test mode. 
 
 Python elements have two elements: a prepare phase and a run phase. You can read about the difference between these two phases [here](https://osdoc.cogsci.nl/3.3/manual/python/about/).
 
@@ -115,12 +115,12 @@ if(var.test_mode == "yes"):
 
 ### Step 2: Add participant instructions
 
-Next, from the set of objects on the left, drag and drop a `sketchpad` ![](images/sketchpad_icon.PNG) into your experiment sequence. The sketchpad should appear at the same level as *settings*. Right click on the sketchpad and rename it *instructions*. I have two pages of instructions in my example above, but you can have as many or as few as you need. 
+Next, from the set of objects on the left, drag and drop a `sketchpad` ![](//images/sketchpad_icon.PNG) into your experiment sequence. The sketchpad should appear at the same level as *settings*. Right click on the sketchpad and rename it *instructions*. I have two pages of instructions in my example above, but you can have as many or as few as you need. 
 
 To write on the sketchpad, in the main pane, click on the text icon and then click in the middle of the sketchpad:
 
 <center>
-![](images/sketchpad_edit1.PNG){width=100% height=100%}
+![](/images/sketchpad_edit1.PNG){width=100% height=100%}
 </center>
 
 Type in your instructions and click OK. Above the grid, you can change the appearance of the instructions and decide how long to present the instructions for. Since we would like participants to proceed to the next screen only when they are ready, we will leave the default *keypress* in the `Duration` field instead of setting a fixed time.
@@ -130,32 +130,32 @@ Type in your instructions and click OK. Above the grid, you can change the appea
 
 ### Step 3: Create a practice loop
 
-Now we'll make a loop of practice sentences. Drag and drop a `loop` ![](images/loop_icon.PNG) so that it's at the same level as the *instructions* and *settings* items. You can drag items up and down in the overview pane to change their order. Right click the loop and rename it *practice_loop*. 
+Now we'll make a loop of practice sentences. Drag and drop a `loop` ![](/images/loop_icon.PNG) so that it's at the same level as the *instructions* and *settings* items. You can drag items up and down in the overview pane to change their order. Right click the loop and rename it *practice_loop*. 
 
-Next, we need to tell OpenSesame what order we want things to happen in for each practice trial (sentence), so drag and drop a sequence ![](images/sequence_icon.PNG) onto the loop. You will get a prompt; select `Insert into practice_loop`:
+Next, we need to tell OpenSesame what order we want things to happen in for each practice trial (sentence), so drag and drop a sequence ![](/images/sequence_icon.PNG) onto the loop. You will get a prompt; select `Insert into practice_loop`:
 
 <center>
-![](images/sequence_insert.png){width=50% height=50%}
+![](/images/sequence_insert.png){width=50% height=50%}
 </center>
 
 Right click on your new sequence and rename it *practice_trial*. In the end, our practice trial should look something like this:
 
 <center>
-![](images/practicetrial_structure.PNG){width=50% height=50%}
+![](/images/practicetrial_structure.PNG){width=50% height=50%}
 </center>
 
 
 Let's go through each object one by one:
 
-At the start of each sentence, we want to make sure any responses from the participant from previous trials are reset to their default states (e.g. previous answers are cleared). To do this, we drag and drop a `reset_feedback` item ![](images/reset_icon.PNG) into *practice_trial* (not after).
+At the start of each sentence, we want to make sure any responses from the participant from previous trials are reset to their default states (e.g. previous answers are cleared). To do this, we drag and drop a `reset_feedback` item ![](/images/reset_icon.PNG) into *practice_trial* (not after).
 
 Next, we want to present a fixation cross to focus participants' eyes before the first word is presented. We use a sketchpad again (rename it *fixation_cross*), but this time use the `fixdot` element to make a dot in the middle of the sketchpad. Change the `Duration` from *keypress* to whatever we need (I've used 495 ms). Note that OpenSesame recommends to use durations that are 5 ms *less* than what you actually want to account for screen refresh rate:
 
 <center>
-![](images/fixation_cross.PNG){width=50% height=50%}
+![](/images/fixation_cross.PNG){width=50% height=50%}
 </center>
 
-Next, we want to send a trigger to the recording software to indicate when participants saw the fixation cross. To do this, add an inline script ![](images/python_icon.PNG). Call it *fixation_trigger*. To send a trigger, we add the following code to the Run phase:
+Next, we want to send a trigger to the recording software to indicate when participants saw the fixation cross. To do this, add an inline script ![](/images/python_icon.PNG). Call it *fixation_trigger*. To send a trigger, we add the following code to the Run phase:
 
 ```{r, eval = FALSE}
 
@@ -174,10 +174,10 @@ var.trigger_interval = 45
 
 ```
 
-Next, we add a jitter screen ![](images/jitter_icon.PNG) (call it *jitter*). This is just a blank screen that has a different, randomly selected duration for each sentence so that participants don't get entrained to the rhythm of the experiment. I set `Duration` to 1000 ms with a jitter of 100 ms and jitter mode standard deviation:
+Next, we add a jitter screen ![](/images/jitter_icon.PNG) (call it *jitter*). This is just a blank screen that has a different, randomly selected duration for each sentence so that participants don't get entrained to the rhythm of the experiment. I set `Duration` to 1000 ms with a jitter of 100 ms and jitter mode standard deviation:
 
 <center>
-![](images/jitter_settings.PNG){width=50% height=50%}
+![](/images/jitter_settings.PNG){width=50% height=50%}
 </center>
 
 Then, we add an inline script item to send another trigger:
@@ -206,7 +206,7 @@ sendPP(0)
 Then, after some sentences we ask participants questions. To present the question, we insert a sketchpad. Add some text to the sketchpad, here is an example:
 
 <center>
-![](images/sketchpad_question.PNG){width=50% height=50%}
+![](/images/sketchpad_question.PNG){width=50% height=50%}
 </center>
 
 OpenSesame knows that whatever is written between the square brackets is a variable that exists in our experimental stimuli. I'll go into detail about adding stimuli in Step 4, but in general, you would have a table that has columns such as *item*, *condition*, *sentence*, *question*, *correct_response*. OpenSesame will automatically pull out the contents of the column *question* that corresponds to the sentence just shown. Everything on the sketchpad that is not between square brackets will stay the same every time, e.g. here I have a prompt to remind participants which key corresponds Yes/No. Set the `Duration` of this sketchpad to zero: the response object coming up will take care of the sketchpad presentation duration.
@@ -221,10 +221,10 @@ sendPP(0)
 
 ```
 
-Now we need to enable participants to answer the question by inserting a keyboard response object ![](images/response_icon.PNG) (there are also mouse and joystick objects if that's what your lab uses). In the response object, we can leave `Correct response` blank to use the *correct_response* from our stimuli table (remember to make sure this is what your correct response column is called!). Fill in the allowed responses and whether you want a timeout; my settings are here:
+Now we need to enable participants to answer the question by inserting a keyboard response object ![](/images/response_icon.PNG) (there are also mouse and joystick objects if that's what your lab uses). In the response object, we can leave `Correct response` blank to use the *correct_response* from our stimuli table (remember to make sure this is what your correct response column is called!). Fill in the allowed responses and whether you want a timeout; my settings are here:
 
 <center>
-![](images/response_settings.PNG){width=50% height=50%}
+![](/images/response_settings.PNG){width=50% height=50%}
 </center>
 
 
@@ -238,12 +238,12 @@ sendPP(0)
 
 ```
 
-Next, we need to log the response using a logger item ![](images/logger_icon.PNG). OpenSesame recommends logging all variables; this will include all the columns in your stimuli table, plus a lot of other background things that OpenSesame tracks like timestamps for every step in your trial/loop. These will be saved in a .csv file as the experiment progresses.
+Next, we need to log the response using a logger item ![](/images/logger_icon.PNG). OpenSesame recommends logging all variables; this will include all the columns in your stimuli table, plus a lot of other background things that OpenSesame tracks like timestamps for every step in your trial/loop. These will be saved in a .csv file as the experiment progresses.
 
 Next, we insert a sketchpad item to offer participants a break. You can set the `Duration` to a specific time to force participants to take a break of a particular length, or you can let them decide by setting it to *keypress*: 
 
 <center>
-![](images/break.PNG){width=50% height=50%}
+![](/images/break.PNG){width=50% height=50%}
 </center>
 
 Then of course we send a trigger to indicate the break:
@@ -259,7 +259,7 @@ sendPP(0)
 Since we don't want participants to take a break after every sentence, we can tell OpenSesame to only present this object when some criterion is reached. To set a criterion, go back up and click on *practice_trial*. In the main window, you will see a list of all the items that appear in that trial, alongside a column called `Run if`: 
 
 <center>
-![](images/break_criterion.PNG){width=50% height=50%}
+![](/images/break_criterion.PNG){width=50% height=50%}
 </center>
 
 Next to the break item is where we write our Run if criterion: here I have said that if `[live_row_practice_loop]` divided by 29 leaves a remainder of 28, then show the break screen. `[live_row_practice_loop]` is a counter that OpenSesame keeps in the background of how many times the trial loop has been presented (i.e. how many sentences have been presented). So participants in this study get a break every 29 sentences. This number and the remainder of 28 was determined by the number of sentences in my experiment and what they were divisible by, so of course you can set this to whatever you want.
@@ -277,14 +277,14 @@ That's our practice phase done!
 So where do the sentences come from? Click on *practice_loop* in your experiment overview. You have two options here: either you can import stimuli from an external file:
 
 <center>
-![](images/stimuli_from_file.PNG){width=50% height=50%}
+![](/images/stimuli_from_file.PNG){width=50% height=50%}
 </center>
 
 
 or you can write them directly into table provided:
 
 <center>
-![](images/stimuli_from_table.PNG){width=50% height=50%}
+![](/images/stimuli_from_table.PNG){width=50% height=50%}
 </center>
 
 
@@ -295,7 +295,7 @@ Make sure that the column names of your experimental table or file correspond ex
 For this tutorial, we'll use the table. To match up with the code for RSVP that we're going to write below, your table should have the same columns as this:
 
 <center>
-![](images/stimuli.PNG){width=50% height=50%}
+![](/images/stimuli.PNG){width=50% height=50%}
 </center>
 
 For now, add some dummy sentences to test our paradigm with.
@@ -458,7 +458,7 @@ for word_nr, word_canvas in enumerate(word_canvas_list):
 ```
 
 
-Ok, time to test it out! First save your experiment, then press this play button ![](images/play_icon.PNG) to see if your experiment runs. Don't confuse the play button with this button: ![](images/notplay_icon.PNG); I forget what it does, just don't press it.
+Ok, time to test it out! First save your experiment, then press this play button ![](/images/play_icon.PNG) to see if your experiment runs. Don't confuse the play button with this button: ![](/images/notplay_icon.PNG); I forget what it does, just don't press it.
 
 
 
@@ -521,7 +521,7 @@ I mentioned earlier that if you have different experimental lists (e.g. for a La
 How does OpenSesame pick which loop to show? Click on the *experiment* sequence right near the top of the overview pane. We can set a `Run if` condition to choose a loop depending on subject number:
 
 <center>
-![](images/randomisation_table.PNG){width=50% height=50%}
+![](/images/randomisation_table.PNG){width=50% height=50%}
 </center>
 
 If you're using an external source file, you only need one *experimental_loop*, but separate source files for each list. 
@@ -529,7 +529,7 @@ If you're using an external source file, you only need one *experimental_loop*, 
 To call your separate source file lists according to subject number, click on *experimental_loop* and next to `File`, enter the condition as I have here:
 
 <center>
-![](images/stimuli_from_file_randomisation.PNG){width=50% height=50%}
+![](/images/stimuli_from_file_randomisation.PNG){width=50% height=50%}
 </center>
 
 This condition assumes that each of my stimuli files is called stimuli_1.csv, stimuli_2.csv, etc., and OpenSesame will pick which one based on the subject number.
