@@ -185,9 +185,9 @@
 </div>
 <div id="step-1-add-a-test-mode" class="section level3">
 <h3>Step 1: Add a test mode</h3>
-<p>In later steps, we’re going to send triggers via the parallel port. Read more about parallel ports in OpenSesame <img src="https://osdoc.cogsci.nl/3.2/manual/devices/parallel/" alt="here" />. But if you’re using a computer that doesn’t have a parallel port (i.e. pretty much any computer that’s not in your EEG lab), OpenSesame will throw an error if you try to send a trigger. We want to be able to test our paradigm without the port, so we can create a test mode where triggers are simply printed in OpenSesame’s code console rather than sent to the port.</p>
+<p>In later steps, we’re going to send triggers via the parallel port. Read more about parallel ports in OpenSesame <a href="https://osdoc.cogsci.nl/3.2/manual/devices/parallel/">here</a>. But if you’re using a computer that doesn’t have a parallel port (i.e. pretty much any computer that’s not in your EEG lab), OpenSesame will throw an error if you try to send a trigger. We want to be able to test our paradigm without the port, so we can create a test mode where triggers are simply printed in OpenSesame’s code console rather than sent to the port.</p>
 <p>From the set of objects on the left, drag and drop an <code>inline_script</code> item <img src="images/python_icon.PNG" /> onto the <em>experiment</em> sequence. It should appear one level below the sequence, as in the screenshot above. Right click on the inline script item and rename it <em>settings</em>. Here we will put some general settings and functions we need for the experiment, starting with our test mode.</p>
-<p>Python elements have two elements: a prepare phase and a run phase. You can read about the difference between these two phases <img src="https://osdoc.cogsci.nl/3.3/manual/python/about/" alt="here" />.</p>
+<p>Python elements have two elements: a prepare phase and a run phase. You can read about the difference between these two phases <a href="https://osdoc.cogsci.nl/3.3/manual/python/about/">here</a>.</p>
 <p>For our test mode, we need to paste the following code into the <code>Prepare</code> tab:</p>
 <pre class="r"><code># import the python libraries we will use
 from psychopy import parallel
