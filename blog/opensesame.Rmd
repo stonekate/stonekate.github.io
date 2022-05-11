@@ -8,7 +8,7 @@ date: '2022-03-11'
 #Description: ''
 #Tags: []
 #Categories: []
-#DisableComments: yes
+DisableComments: no
 # draft: TRUE
 #header-includes:
 #- <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script> # seems to be necessary for pandoc
@@ -46,24 +46,24 @@ An OpenSesame experiment contains `sequences` ![](/images/sequence_icon.PNG), wh
 
 ### Getting started
 
-In the steps below, we're going to re-create the experiment structure above. Open a new OpenSesame experiment and click on *New experiment* in the Overview pane. This will open a tab in the main area called *General properties*. In *General properties*, I use `xpyriment` for the `Back-end`. On computers with limited graphics capabilities, you might have to choose `legacy`. This can be changed any time without breaking the experiment. The screen resolution should be that of your lab presentation PC. You can adjust the default font size/colour etc. to suit your lab.
+In the steps below, we're going to re-create the experiment structure above. Open a new OpenSesame experiment and click on *New experiment* in the Overview pane. This will open a tab in the main area called *General properties*. In *General properties*, you can change the name *New experiment* to something more interesting; I've called mine Gurdibu. I use `xpyriment` for the `Back-end`, but on computers with limited graphics capabilities, you might have to choose `legacy`. This can be changed any time without breaking the experiment. The screen resolution should be that of your lab presentation PC. You can adjust the default font size/colour etc. to suit your lab.
 
 <center>
 ![](/images/general_tab.PNG){width=75% height=75%}
 </center>
 
-Next, right-click on the `sequence` ![](/images/sequence_icon.PNG) called `experiment` in the experiment overview and give your experiment a name. Delete the two objects that are currently sitting under `experiment`.
+Next, delete any default objects that are currently sitting under `experiment`.
 
-**Very important:** Save your experiment, and keep saving it throughout.
+**Very important:** Save your experiment now, and keep saving it throughout.
 
 
 ### Step 1: Add a test mode
 
-In later steps, we're going to send triggers via the parallel port. Read more about parallel ports in OpenSesame [here](https://osdoc.cogsci.nl/3.2/manual/devices/parallel/). But if you're using a computer that doesn't have a parallel port (i.e. pretty much any computer that's not in your EEG lab), OpenSesame will throw an error if you try to send a trigger. We want to be able to test our paradigm without the port, so we can create a test mode where triggers are simply printed in OpenSesame's code console rather than sent to the port.
+In later steps, we're going to send triggers to the EEG recording computer via the parallel port. Read more about parallel ports in OpenSesame [here](https://osdoc.cogsci.nl/3.2/manual/devices/parallel/). But if you're using a computer that doesn't have a parallel port (i.e. pretty much any computer that's not in your EEG lab), OpenSesame will throw an error if you try to send a trigger. We want to be able to test our paradigm without the port, so we can create a test mode where triggers are simply printed in OpenSesame's code console rather than sent to the port.
 
-From the set of objects on the left, drag and drop an `inline_script` item ![](/images/python_icon.PNG) onto the *experiment* sequence. It should appear one level below the sequence, as in the screenshot above. Right click on the inline script item and rename it *settings*. Here we will put some general settings and functions we need for the experiment, starting with our test mode. 
+From the set of objects on the left, drag and drop an `inline_script` item ![](/images/python_icon.PNG) onto the *experiment* sequence. It should appear one level below *experiment*, as in the first screenshot above. Right click on the inline script item and rename it *settings*. Here we will put some general settings and functions we need for the experiment, starting with our test mode. 
 
-Python elements have two elements: a prepare phase and a run phase. You can read about the difference between these two phases [here](https://osdoc.cogsci.nl/3.3/manual/python/about/).
+Python inline scripts have two elements: a prepare phase and a run phase. You can read about the difference between these two phases [here](https://osdoc.cogsci.nl/3.3/manual/python/about/).
 
 For our test mode, we need to paste the following code into the `Prepare` tab:
 
@@ -97,7 +97,7 @@ else:
 
 ```
 
-Then paste the following on the `Run` tab to give you a warning that you're in test mode:
+Then paste the following into the `Run` tab to give you a warning when you're in test mode:
 
 ```{r}
 
@@ -115,7 +115,7 @@ if(var.test_mode == "yes"):
 
 ### Step 2: Add participant instructions
 
-Next, from the set of objects on the left, drag and drop a `sketchpad` ![](//images/sketchpad_icon.PNG) into your experiment sequence. The sketchpad should appear at the same level as *settings*. Right click on the sketchpad and rename it *instructions*. I have two pages of instructions in my example above, but you can have as many or as few as you need. 
+Next, from the set of objects on the left, drag and drop a `sketchpad` ![](/images/sketchpad_icon.PNG) into your experiment sequence. The sketchpad should appear at the same level as *settings*. Right click on the sketchpad and rename it *instructions*. I have two pages of instructions in my example above, but you can have as many or as few as you need. 
 
 To write on the sketchpad, in the main pane, click on the text icon and then click in the middle of the sketchpad:
 
@@ -132,20 +132,20 @@ Type in your instructions and click OK. Above the grid, you can change the appea
 
 Now we'll make a loop of practice sentences. Drag and drop a `loop` ![](/images/loop_icon.PNG) so that it's at the same level as the *instructions* and *settings* items. You can drag items up and down in the overview pane to change their order. Right click the loop and rename it *practice_loop*. 
 
-Next, we need to tell OpenSesame what order we want things to happen in for each practice trial (sentence), so drag and drop a sequence ![](/images/sequence_icon.PNG) onto the loop. You will get a prompt; select `Insert into practice_loop`:
+Next, we need to tell OpenSesame what order we want things to happen in for each practice trial, so drag and drop a sequence ![](/images/sequence_icon.PNG) onto the loop. You will get a prompt; select `Insert into practice_loop`:
 
 <center>
-![](/images/sequence_insert.png){width=50% height=50%}
+![](/images/sequence_insert.png){width=40% height=40%}
 </center>
 
-Right click on your new sequence and rename it *practice_trial*. In the end, our practice trial should look something like this:
+Right click on your new sequence and rename it *practice_trial*. In the end, our practice trial will look like this:
 
 <center>
 ![](/images/practicetrial_structure.PNG){width=50% height=50%}
 </center>
 
 
-Let's go through each object one by one:
+Let's add each object one by one:
 
 At the start of each sentence, we want to make sure any responses from the participant from previous trials are reset to their default states (e.g. previous answers are cleared). To do this, we drag and drop a `reset_feedback` item ![](/images/reset_icon.PNG) into *practice_trial* (not after).
 
@@ -165,7 +165,9 @@ sendPP(0)
 
 ```
 
-Translated, this code means: send trigger 194, wait a pre-specified interval of time, then send a zero trigger to reset the port. You need the time interval between the 194 and 0 triggers because otherwise they'll get sent at the same time and you'll only be able to see the zero in your EEG recording. The pre-specified interval of time should be added to the `Prepare` tab of the *settings* inline script:
+Translated, this code means: send trigger 194, wait a pre-specified interval of time, then send a zero trigger to reset the port. You need the time interval between the 194 and 0 triggers because otherwise they'll get sent at the same time and you'll only be able to see the zero in your EEG recording. 
+
+The pre-specified interval of time should be added to the `Prepare` tab of the *settings* inline script (just paste it anywhere in the Prepare tab, the order doesn't matter). I've set it as 45 ms, but it can be anything:
 
 ```{r}
 
@@ -174,13 +176,13 @@ var.trigger_interval = 45
 
 ```
 
-Next, we add a jitter screen ![](/images/jitter_icon.PNG) (call it *jitter*). This is just a blank screen that has a different, randomly selected duration for each sentence so that participants don't get entrained to the rhythm of the experiment. I set `Duration` to 1000 ms with a jitter of 100 ms and jitter mode standard deviation:
+Next, we add a jitter screen ![](/images/jitter_icon.PNG) (call it *jitter*). This just presents a blank screen for a different, randomly selected duration before each sentence so that participants don't get entrained to the rhythm of the experiment. I set `Duration` to 1000 ms with a jitter of 100 ms and jitter mode of standard deviation:
 
 <center>
 ![](/images/jitter_settings.PNG){width=50% height=50%}
 </center>
 
-Then, we add an inline script item to send another trigger:
+Then, we add another inline script called *trigger_jitter* item to send another trigger:
 
 ```{r, eval = FALSE}
 
@@ -190,9 +192,9 @@ sendPP(0)
 
 ```
 
-Then we add another Python item which we'll call *RSVP*. This is where we'll program the sentences to be presented word-by-word, but we'll leave that until Step 5.
+Then, add another inline script and call it *RSVP*. This is where we'll program the sentences to be presented word-by-word, but we'll leave that until Step 5.
 
-After RSVP, we insert another trigger that marks that the sentence is finished:
+After RSVP, add another trigger called *trigger_endsentence* that marks when the sentence finished:
 
 ```{r, eval = FALSE}
 
@@ -203,15 +205,15 @@ sendPP(0)
 ```
 
 
-Then, after some sentences we ask participants questions. To present the question, we insert a sketchpad. Add some text to the sketchpad, here is an example:
+After some sentences we ask participants a question. To present the question, we insert a sketchpad. Add some text to the sketchpad as before, here is an example:
 
 <center>
 ![](/images/sketchpad_question.PNG){width=50% height=50%}
 </center>
 
-OpenSesame knows that whatever is written between the square brackets is a variable that exists in our experimental stimuli. I'll go into detail about adding stimuli in Step 4, but in general, you would have a table that has columns such as *item*, *condition*, *sentence*, *question*, *correct_response*. OpenSesame will automatically pull out the contents of the column *question* that corresponds to the sentence just shown. Everything on the sketchpad that is not between square brackets will stay the same every time, e.g. here I have a prompt to remind participants which key corresponds Yes/No. Set the `Duration` of this sketchpad to zero: the response object coming up will take care of the sketchpad presentation duration.
+OpenSesame knows that whatever is written between the square brackets (here: [question]) is a variable that exists in our experimental stimuli. I'll go into detail about adding stimuli in Step 4, but in general, you would have a table that has columns such as *item*, *condition*, *sentence*, *question*, *correct_response*. OpenSesame will automatically pull out the contents of the column *question* that corresponds to the current sentence. Everything on the sketchpad that is not between square brackets will stay the same on every trial, e.g. here I have a prompt to remind participants which keyboard key corresponds Yes/No. Set the `Duration` of this sketchpad to zero: the response object coming up will take care of the sketchpad presentation duration.
 
-Next we send a trigger to indicate when the question was asked:
+Next we add a trigger called *trigger_question* to indicate when the question was asked:
 
 ```{r, eval = FALSE}
 
@@ -228,7 +230,7 @@ Now we need to enable participants to answer the question by inserting a keyboar
 </center>
 
 
-Send another trigger to signal the response:
+Add another trigger called *trigger_response* to signal the response:
 
 ```{r, eval = FALSE}
 
@@ -246,7 +248,7 @@ Next, we insert a sketchpad item to offer participants a break. You can set the 
 ![](/images/break.PNG){width=50% height=50%}
 </center>
 
-Then of course we send a trigger to indicate the break:
+Then of course we add a trigger called *trigger_break* to indicate the break:
 
 ```{r, eval = FALSE}
 
@@ -262,9 +264,9 @@ Since we don't want participants to take a break after every sentence, we can te
 ![](/images/break_criterion.PNG){width=50% height=50%}
 </center>
 
-Next to the break item is where we write our Run if criterion: here I have said that if `[live_row_practice_loop]` divided by 29 leaves a remainder of 28, then show the break screen. `[live_row_practice_loop]` is a counter that OpenSesame keeps in the background of how many times the trial loop has been presented (i.e. how many sentences have been presented). So participants in this study get a break every 29 sentences. This number and the remainder of 28 was determined by the number of sentences in my experiment and what they were divisible by, so of course you can set this to whatever you want.
+Next to the break object is where we write our Run if criterion: here I have said that if `[live_row_practice_loop]` divided by 29 leaves a remainder of 28, then show the break screen. `[live_row_practice_loop]` is a counter that OpenSesame keeps in the background of how many times the trial loop has been presented (i.e. how many sentences have been presented). So participants in this study get a break every 29 sentences. This number and the remainder of 28 was determined by the number of sentences in my experiment and what they were divisible by, so of course you can set this to whatever you want.
 
-Note that we have to apply the same rule to the break trigger so that it is only sent whenever the break occurs. 
+Note that we have to apply the same rule to the *trigger_break* so that it is only sent whenever the break occurs. 
 
 I've also set some other Run if rules in the *practice_loop*, namely that the question screen and associated response and trigger items are only shown if there is no NA in the *question* column of the stimuli table (not all of my sentences have questions).
 
@@ -277,25 +279,25 @@ That's our practice phase done!
 So where do the sentences come from? Click on *practice_loop* in your experiment overview. You have two options here: either you can import stimuli from an external file:
 
 <center>
-![](/images/stimuli_from_file.PNG){width=50% height=50%}
+![](/images/stimuli_from_file.PNG){width=70% height=70%}
 </center>
 
 
 or you can write them directly into table provided:
 
 <center>
-![](/images/stimuli_from_table.PNG){width=50% height=50%}
+![](/images/stimuli_from_table.PNG){width=70% height=70%}
 </center>
 
 
 Writing them in the table can be a good idea if you're using non-Roman characters. For example, I've had trouble getting OpenSesame to display German words from external files and it took a lot of vague Python error messages to discover that umlauts were the problem (tip: setting UTF-8 encoding via Microsoft Excel or Notepad++ doesn't work, but UTF-8 encoding from R does! ¯\_(ツ)_/¯ ).
 
-Make sure that the column names of your experimental table or file correspond exactly to the names of these variables that you call elsewhere in the experiment, e.g. on the question sketchpad or in Python code items.
+Make sure that the column names of your experimental table or file correspond exactly to the names of these variables that you call elsewhere in the experiment, e.g. on the question sketchpad or in Python inline scripts.
 
 For this tutorial, we'll use the table. To match up with the code for RSVP that we're going to write below, your table should have the same columns as this:
 
 <center>
-![](/images/stimuli.PNG){width=50% height=50%}
+![](/images/stimuli.PNG){width=80% height=80%}
 </center>
 
 For now, add some dummy sentences to test our paradigm with.
@@ -309,9 +311,9 @@ For now, add some dummy sentences to test our paradigm with.
 
 We first need to go back to our *settings* inline script and add some functions to chop up sentences into words, calculate their presentation durations, and decide for which words to send triggers and what triggers.
 
-Note that I use a variable presentation duration for each word depending on the word's length, except for the target word, which I present for 700 ms. But you could also just set each word to appear for the same duration.
+I use a variable presentation duration for each word depending on the word's length, except for the target word, which I present for 700 ms. But you could also just set each word to appear for the same duration.
 
-For my triggers, I base them on my experimental conditions, which I have numbered from 0 to 3 (note that Python starts counting at zero). So that I can later identify which triggers belong to which condition, I multiply the word number by the condition number. For the target word, I send a different (also condition-based) trigger: this makes it easier to extract target words from the EEG when you have targets in different sentence positions between conditions or items. The target word trigger is sent whenever the word number matches the column *target_wordno* in the stimuli table. Since Python starts counting words from zero, *target_wordno* should be 1 less than the actual word number.
+For my triggers, I base them on my experimental conditions, which I have numbered from 0 to 3 (note that Python starts counting at zero). So that I can later identify which triggers belong to which condition, I multiply the trigger by the condition number. For the target word, I send a different (also condition-based) trigger: this makes it easier to extract target words from the EEG when you have targets in different sentence positions between conditions or items. The target word trigger is sent whenever the word number matches the column *target_wordno* in the stimuli table. Since Python starts counting words from zero, *target_wordno* should be 1 less than the actual word number.
 
 I also only send triggers for words that I might want to analyse later, so I've split my sentences into two parts: *context* and *sentence* (see the table in Step 4). The code below will send triggers only for the *sentence* words. But of course you could just have your whole sentence under *sentence* and send a trigger for each word.
 
@@ -394,7 +396,7 @@ sendPP(0)
 
 ```
 
-Next, go to the *RSVP* Python item in *practice_trial*. In the `Prepare` tab of *RSVP*, we will use the `stim_prep` function we defined in *settings* to chop up the sentence for the current trial into words and compute a presentation duration and trigger number for each word. Paste in the following code:
+Next, go to the *RSVP* Python item in *practice_trial*. In the `Prepare` tab of *RSVP*, we will use the `stim_prep` function we defined in *settings* to chop up the sentence for the current trial into words and compute a presentation duration and trigger number for each word. Paste the following code into `Prepare`:
 
 ```{r}
 # Here we create some empty lists for storing things (triggers etc.) that will
@@ -481,7 +483,7 @@ At this point you might want to go back to the *practice_loop* and change the co
 
 ### Step 8: Finishing touches
 
-Finally, you might like to show participants a message when they finish the practice phase and the experiment. Drag and drop sketchpad onto the *experiment* sequence, so that they're both at the same level as the *instructions* sketchpad. Drag them so that one is after the *practice_loop* and one after the *experimental_loop*. Edit the sketchpads to show participants a message like "That was the practice phase! If you are ready to continue, press the spacebar".
+Finally, you might like to show participants a message when they finish the practice phase and the experiment. Drag and drop two sketchpads onto the *experiment* sequence, so that they're both at the same level as the *instructions* sketchpad. Drag them so that one is after the *practice_loop* and one after the *experimental_loop*. Edit the sketchpads to show participants a message like "That was the practice phase! If you are ready to continue, press the spacebar".
 
 I would also recommend sending a trigger at the end of the practice phase called *trigger_pracend*, after the sketchpad we just added:
 
@@ -516,12 +518,12 @@ That's it, your experiment is now ready!
 
 #### Latin square design
 
-I mentioned earlier that if you have different experimental lists (e.g. for a Latin square design) and you're using the OpenSesame table rather than external files for your stimuli, you'll need to have a separate *experimental_loop* for each list (unless you can get the code under *Splitting stimuli...* below to work). To do this, create a new loop with a trial sequence underneath the current *experimental_trial* and then `Copy (linked)` all the trial objects in as above. Rename your experimental loops with something unique like *experimental_loop_list1*, *experimental_loop_list2*, etc. Then you can update the stimuli table with your stimuli from list 2 (or whatever). 
+I mentioned earlier that if you have different experimental lists (e.g. for a Latin square design) and you're using the OpenSesame table rather than external files for your stimuli, you'll need to have a separate *experimental_loop* for each list (unless you can get the code under *Splitting stimuli...* below to work). To do this, create new loops with a trial sequence underneath the current *experimental_trial* and then `Copy (linked)` all the trial objects as you did above. Rename your experimental loops with something unique like *experimental_loop_list1*, *experimental_loop_list2*, etc. Then you can update the stimuli table with your stimuli from list 2 (or whatever). 
 
 How does OpenSesame pick which loop to show? Click on the *experiment* sequence right near the top of the overview pane. We can set a `Run if` condition to choose a loop depending on subject number:
 
 <center>
-![](/images/randomisation_table.PNG){width=50% height=50%}
+![](/images/randomisation_table.PNG){width=40% height=40%}
 </center>
 
 If you're using an external source file, you only need one *experimental_loop*, but separate source files for each list. 
@@ -529,7 +531,7 @@ If you're using an external source file, you only need one *experimental_loop*, 
 To call your separate source file lists according to subject number, click on *experimental_loop* and next to `File`, enter the condition as I have here:
 
 <center>
-![](/images/stimuli_from_file_randomisation.PNG){width=50% height=50%}
+![](/images/stimuli_from_file_randomisation.PNG){width=70% height=70%}
 </center>
 
 This condition assumes that each of my stimuli files is called stimuli_1.csv, stimuli_2.csv, etc., and OpenSesame will pick which one based on the subject number.
@@ -542,10 +544,9 @@ More efficient than the above step would be to have OpenSesame split a single st
 
 
 ```{r}
-# split stimuli into lists
-# *** This had to be done manually in R; the writing to file seemed to mess up the encoding and/or commas ***
-# 'r' and 'w' in lines 39 and 46 were rt and wb in Bruno's script, which seems only
-# compatible with Python 2. The below version is compatible with Python 3.
+
+var.stim_file = "stimuli.csv"
+
 for l in range(N_lists):
    new_rows = [] # a holder for our modified rows when we make them
    with open(pool[var.stim_file], 'r') as f:
