@@ -211,7 +211,7 @@ After some sentences we ask participants a question. To present the question, we
 ![](/images/sketchpad_question.PNG){width=60% height=60%}
 </center>
 
-OpenSesame knows that whatever is written between the square brackets (here: [question]) is a variable that exists in our experimental stimuli. I'll go into detail about adding stimuli in Step 4, but in general, you would have a table that has columns such as *item*, *condition*, *sentence*, *question*, *correct_response*. OpenSesame will automatically pull out the contents of the column *question* that corresponds to the current sentence. Everything on the sketchpad that is not between square brackets will stay the same on every trial, e.g. here I have a prompt to remind participants which keyboard key corresponds Yes/No. Set the `Duration` of this sketchpad to zero: the response object coming up will take care of the sketchpad presentation duration.
+OpenSesame knows that whatever is written between the square brackets (here: [question]) is a variable that exists in our experimental stimuli. I'll go into detail about adding stimuli in Step 4, but in general, you would have a table that has columns such as *item*, *condition*, *sentence*, *question*, *correct_response*. OpenSesame will automatically pull out the contents of the column *question* that corresponds to the current sentence. Everything on the sketchpad that is not between square brackets will stay the same on every trial, e.g. here I have a prompt to remind participants which keyboard key corresponds to Yes/No. Set the `Duration` of this sketchpad to zero: the response object coming up will take care of the sketchpad presentation duration.
 
 Next we add a trigger called *trigger_question* to indicate when the question was asked:
 
@@ -300,7 +300,7 @@ For this tutorial, we'll use the table. To match up with the code for RSVP that 
 ![](/images/stimuli.PNG){width=90% height=90%}
 </center>
 
-For now, add some dummy sentences to test our paradigm with.
+
 
 
 
@@ -438,24 +438,24 @@ The `Run` tab of *RSVP* is where the action happens: all of our prepared words a
 
 # for each word in our list of canvases
 for word_nr, word_canvas in enumerate(word_canvas_list):
-  # show the word
-  word_canvas.show()
-  # send the trigger that corresponds to that word
-	tr = var.trigger[word_nr]
-	sendPP(tr)
-	# if the current word number equals the target word number in the stimuli table,
-	# presentation duration should be 700 ms (minus 5 ms for screen refresh rate)
-	if word_nr == var.target_wordno: 
-		clock.sleep(695)
-	# otherwise present it for the corresponding duration from our pres_dur list
-	else:
-		clock.sleep(var.pres_dur[word_nr])
-	# clear the canvas
-	blank_canvas.show()
-	# reset the parallel port to zero
-	sendPP(0)
-	# wait for the length of the inter-stimulus interval before the next word
-	clock.sleep(var.isi)
+    # show the word
+    word_canvas.show()
+    # send the trigger that corresponds to that word
+	  tr = var.trigger[word_nr]
+	  sendPP(tr)
+	  # if the current word number equals the target word number in the stimuli table,
+	  # presentation duration should be 700 ms (minus 5 ms for screen refresh rate)
+	  if word_nr == var.target_wordno: 
+		    clock.sleep(695)
+	   # otherwise present it for the corresponding duration from our pres_dur list
+	  else:
+		    clock.sleep(var.pres_dur[word_nr])
+  	# clear the canvas
+	  blank_canvas.show()
+	  # reset the parallel port to zero
+	  sendPP(0)
+	  # wait for the length of the inter-stimulus interval before the next word
+	  clock.sleep(var.isi)
 
 ```
 

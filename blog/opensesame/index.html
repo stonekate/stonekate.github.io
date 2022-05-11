@@ -275,7 +275,7 @@ sendPP(0)</code></pre>
 <center>
 <img src="/images/sketchpad_question.PNG" style="width:60.0%;height:60.0%" />
 </center>
-<p>OpenSesame knows that whatever is written between the square brackets (here: [question]) is a variable that exists in our experimental stimuli. I’ll go into detail about adding stimuli in Step 4, but in general, you would have a table that has columns such as <em>item</em>, <em>condition</em>, <em>sentence</em>, <em>question</em>, <em>correct_response</em>. OpenSesame will automatically pull out the contents of the column <em>question</em> that corresponds to the current sentence. Everything on the sketchpad that is not between square brackets will stay the same on every trial, e.g. here I have a prompt to remind participants which keyboard key corresponds Yes/No. Set the <code>Duration</code> of this sketchpad to zero: the response object coming up will take care of the sketchpad presentation duration.</p>
+<p>OpenSesame knows that whatever is written between the square brackets (here: [question]) is a variable that exists in our experimental stimuli. I’ll go into detail about adding stimuli in Step 4, but in general, you would have a table that has columns such as <em>item</em>, <em>condition</em>, <em>sentence</em>, <em>question</em>, <em>correct_response</em>. OpenSesame will automatically pull out the contents of the column <em>question</em> that corresponds to the current sentence. Everything on the sketchpad that is not between square brackets will stay the same on every trial, e.g. here I have a prompt to remind participants which keyboard key corresponds to Yes/No. Set the <code>Duration</code> of this sketchpad to zero: the response object coming up will take care of the sketchpad presentation duration.</p>
 <p>Next we add a trigger called <em>trigger_question</em> to indicate when the question was asked:</p>
 <pre class="r"><code>sendPP(196)
 clock.sleep(var.trigger_interval)
@@ -322,7 +322,6 @@ sendPP(0)</code></pre>
 <center>
 <img src="/images/stimuli.PNG" style="width:90.0%;height:90.0%" />
 </center>
-<p>For now, add some dummy sentences to test our paradigm with.</p>
 </div>
 <div id="step-5-setting-up-rapid-serial-visual-presentation-rsvp" class="section level3">
 <h3>Step 5: Setting up rapid serial visual presentation (RSVP)</h3>
@@ -426,24 +425,24 @@ var.isi = 295</code></pre>
 <p>The <code>Run</code> tab of <em>RSVP</em> is where the action happens: all of our prepared words and their associated properties (duration, trigger) will now be presented one by one using a loop:</p>
 <pre class="r"><code># for each word in our list of canvases
 for word_nr, word_canvas in enumerate(word_canvas_list):
-  # show the word
-  word_canvas.show()
-  # send the trigger that corresponds to that word
-    tr = var.trigger[word_nr]
-    sendPP(tr)
-    # if the current word number equals the target word number in the stimuli table,
-    # presentation duration should be 700 ms (minus 5 ms for screen refresh rate)
-    if word_nr == var.target_wordno: 
-        clock.sleep(695)
-    # otherwise present it for the corresponding duration from our pres_dur list
-    else:
-        clock.sleep(var.pres_dur[word_nr])
+    # show the word
+    word_canvas.show()
+    # send the trigger that corresponds to that word
+      tr = var.trigger[word_nr]
+      sendPP(tr)
+      # if the current word number equals the target word number in the stimuli table,
+      # presentation duration should be 700 ms (minus 5 ms for screen refresh rate)
+      if word_nr == var.target_wordno: 
+            clock.sleep(695)
+       # otherwise present it for the corresponding duration from our pres_dur list
+      else:
+            clock.sleep(var.pres_dur[word_nr])
     # clear the canvas
-    blank_canvas.show()
-    # reset the parallel port to zero
-    sendPP(0)
-    # wait for the length of the inter-stimulus interval before the next word
-    clock.sleep(var.isi)</code></pre>
+      blank_canvas.show()
+      # reset the parallel port to zero
+      sendPP(0)
+      # wait for the length of the inter-stimulus interval before the next word
+      clock.sleep(var.isi)</code></pre>
 <p>Ok, time to test it out! First save your experiment, then press this play button <img src="/images/play_icon.PNG" /> to see if your experiment runs. Don’t confuse the play button with this button: <img src="/images/notplay_icon.PNG" />; I forget what it does, just don’t press it.</p>
 </div>
 <div id="step-7-set-up-the-experimental-loop" class="section level3">
