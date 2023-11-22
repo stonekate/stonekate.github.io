@@ -28,6 +28,8 @@ knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE, cache = FAL
 
 [OpenSesame](https://osdoc.cogsci.nl) is a free, open source tool for building experiments. In this tutorial, I'm going to build a rapid serial visual presentation (RSVP) paradigm of the kind typically used for presenting sentences word-by-word to participants in ERP experiments. The paradigm will send triggers at particular words to the EEG recording computer so that these words can later be located in the EEG recording. 
 
+[PLEASE NOTE: The paradigm in this tutorial was designed using OpenSesame v3.3.10 and unfortunately does not work with v4+. I will update it eventually, but the general structure and concepts may still be helpful to you.]
+
 You will need to have OpenSesame installed: [https://osdoc.cogsci.nl](https://osdoc.cogsci.nl). There are also several tutorials on that page. The code used in the following tutorial is a mix of my own clumsy code and more sophisticated stuff borrowed from [this attentional-blink tutorial](https://osdoc.cogsci.nl/3.2/tutorials/advanced/) and [Bruno Nicenboim](https://osf.io/w85gc/). 
 
 
