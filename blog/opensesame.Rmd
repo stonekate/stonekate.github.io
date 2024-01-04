@@ -1,23 +1,12 @@
 ---
-title: "Tutorial: An RSVP experiment in OpenSesame"
+title: 'Tutorial: An RSVP experiment in OpenSesame'
 author: "Kate Stone"
-date: '2022-03-11'
-#slug: []
-#categories: []
-#tags: []
-#Description: ''
-#Tags: []
-#Categories: []
+date: "2022-03-11"
+output:
+  html_document:
+    df_print: paged
+always_allow_html: yes
 DisableComments: no
-# draft: TRUE
-#header-includes:
-#- <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script> # seems to be necessary for pandoc
-#- <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script> # would be for mathjax except I used Yihui's solution in the footer partial
-#- <img src="//images/snorkelling2.PNG" alt="tetapare">
-#output:
-#  html_document:
-#    keep_md: yes # do this for each blog post
-always_allow_html: true # needs to be in each blog yaml header so that any html in an md file is rendered
 ---
 
 ```{r setup, include=FALSE}
@@ -25,10 +14,9 @@ knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE, cache = FAL
 
 ```
 
-
 [OpenSesame](https://osdoc.cogsci.nl) is a free, open source tool for building experiments. In this tutorial, I'm going to build a rapid serial visual presentation (RSVP) paradigm of the kind typically used for presenting sentences word-by-word to participants in ERP experiments. The paradigm will send triggers at particular words to the EEG recording computer so that these words can later be located in the EEG recording. 
 
-[PLEASE NOTE: The paradigm in this tutorial was designed using OpenSesame v3.3.10 and unfortunately does not work with v4+. I will update it eventually, but the general structure and concepts may still be helpful to you.]
+<span style="color:blue">**PLEASE NOTE:** The paradigm in this tutorial was designed using OpenSesame **v3.3.10** and unfortunately **does not work with v4+**. I will update the tutorial eventually, but the general structure and concepts may still be helpful to you.</span>
 
 You will need to have OpenSesame installed: [https://osdoc.cogsci.nl](https://osdoc.cogsci.nl). There are also several tutorials on that page. The code used in the following tutorial is a mix of my own clumsy code and more sophisticated stuff borrowed from [this attentional-blink tutorial](https://osdoc.cogsci.nl/3.2/tutorials/advanced/) and [Bruno Nicenboim](https://osf.io/w85gc/). 
 

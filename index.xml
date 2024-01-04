@@ -14,7 +14,7 @@
       
       <guid>/blog/opensesame/</guid>
       <description>OpenSesame is a free, open source tool for building experiments. In this tutorial, I’m going to build a rapid serial visual presentation (RSVP) paradigm of the kind typically used for presenting sentences word-by-word to participants in ERP experiments. The paradigm will send triggers at particular words to the EEG recording computer so that these words can later be located in the EEG recording.
-You will need to have OpenSesame installed: https://osdoc.</description>
+PLEASE NOTE: The paradigm in this tutorial was designed using OpenSesame v3.</description>
     </item>
     
     <item>
