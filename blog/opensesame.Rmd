@@ -1,7 +1,7 @@
 ---
 title: 'Tutorial: An RSVP experiment in OpenSesame'
 author: "Kate Stone"
-date: "2022-03-11"
+date: "2025-03-18"
 output:
   html_document:
     df_print: paged
@@ -49,7 +49,7 @@ Next, delete any default objects that are currently sitting under `experiment`.
 
 ### Step 1: Add a test mode
 
-In later steps, we'll send triggers to the EEG recording computer via the parallel port. Read more about parallel ports in OpenSesame [here](https://osdoc.cogsci.nl/3.2/manual/devices/parallel/). But if you're using a computer that doesn't have a parallel port (i.e. pretty much any computer that's not in your EEG lab), OpenSesame will throw an error if you try to send a trigger.To be able to test our paradigm without a port, we can create a test mode where triggers are simply printed in OpenSesame's code console rather than sent to the port.
+In later steps, we'll send triggers to the EEG recording computer via the parallel port. Read more about parallel ports in OpenSesame [here](https://osdoc.cogsci.nl/3.2/manual/devices/parallel/). But if you're using a computer that doesn't have a parallel port (i.e. pretty much any computer that's not in your EEG lab), OpenSesame will throw an error if you try to send a trigger. To be able to test our paradigm without a port, we can create a test mode where triggers are simply printed in OpenSesame's code console rather than sent to the port.
 
 From the set of objects on the left, drag and drop an `inline_script` item ![](/images/python_icon.PNG) onto the *experiment* sequence. It should appear one level below *experiment*, as in the first screenshot above. Right click on the inline script item and rename it *settings*. Here we will put some general settings and functions we need for the experiment, starting with our test mode. 
 
