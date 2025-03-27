@@ -3,6 +3,11 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
+    <loc>/forparticipants/</loc>
+    <lastmod>2025-03-27T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
     <loc>/</loc>
     <lastmod>2025-03-18T00:00:00+00:00</lastmod>
   </url>
@@ -15,11 +20,6 @@
   <url>
     <loc>/blog/opensesame/</loc>
     <lastmod>2025-03-18T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>/forparticipants/</loc>
-    <lastmod>2024-06-26T00:00:00+00:00</lastmod>
   </url>
   
   <url>
